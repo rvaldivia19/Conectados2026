@@ -47,6 +47,31 @@ body {
   min-height: 100vh;
 }
 
+/* Loading */
+#loadingScreen {
+  position: fixed; inset: 0;
+  background: var(--bg);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  z-index: 9999; gap: 16px;
+}
+.spinner {
+  width: 36px; height: 36px;
+  border: 3px solid var(--border2);
+  border-top-color: var(--blue);
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-txt { font-size: 13px; color: var(--text3); font-weight: 500; }
+
+#errorBanner {
+  display: none;
+  background: var(--red-bg); border: 1px solid var(--red);
+  border-radius: var(--radius); padding: 14px 18px;
+  color: var(--red); font-size: 13px; margin-bottom: 1rem;
+}
+
 /* Layout */
 .page { max-width: 1140px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
 
@@ -55,15 +80,26 @@ body {
   display: flex; align-items: flex-start; justify-content: space-between;
   flex-wrap: wrap; gap: 16px; margin-bottom: 1.75rem;
 }
-.header-left {}
 .header-eyebrow {
   font-size: 11px; font-weight: 500; letter-spacing: 0.08em;
   text-transform: uppercase; color: var(--text3); margin-bottom: 6px;
 }
-.header-title {
-  font-size: 24px; font-weight: 600; color: var(--text); line-height: 1.2;
-}
+.header-title { font-size: 24px; font-weight: 600; color: var(--text); line-height: 1.2; }
 .header-sub { font-size: 13px; color: var(--text2); margin-top: 4px; }
+.header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+
+.refresh-btn {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px; font-weight: 500;
+  padding: 6px 14px; border-radius: 8px;
+  border: 1px solid var(--border2);
+  background: var(--surface); color: var(--text2);
+  cursor: pointer; box-shadow: var(--shadow);
+  transition: all .15s; display: flex; align-items: center; gap: 6px;
+}
+.refresh-btn:hover { background: var(--surface2); color: var(--text); }
+.refresh-btn:disabled { opacity: .5; cursor: not-allowed; }
+.last-update { font-size: 11px; color: var(--text3); }
 
 .filters {
   display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
@@ -77,8 +113,7 @@ select {
   font-size: 13px; padding: 5px 10px;
   border-radius: 8px; border: 1px solid var(--border2);
   background: var(--surface2); color: var(--text);
-  cursor: pointer; outline: none;
-  transition: border-color .15s;
+  cursor: pointer; outline: none; transition: border-color .15s;
 }
 select:focus { border-color: var(--blue); }
 
@@ -90,8 +125,7 @@ select:focus { border-color: var(--blue); }
 .metric {
   background: var(--surface); border: 1px solid var(--border);
   border-radius: var(--radius-lg); padding: 16px 18px;
-  box-shadow: var(--shadow);
-  transition: box-shadow .2s;
+  box-shadow: var(--shadow); transition: box-shadow .2s;
 }
 .metric:hover { box-shadow: var(--shadow-md); }
 .metric-label {
@@ -115,21 +149,13 @@ select:focus { border-color: var(--blue); }
   transition: all .15s; box-shadow: var(--shadow);
 }
 .tab:hover { background: var(--surface2); color: var(--text); }
-.tab.active {
-  background: var(--text); color: #fff; border-color: var(--text);
-  box-shadow: var(--shadow-md);
-}
+.tab.active { background: var(--text); color: #fff; border-color: var(--text); box-shadow: var(--shadow-md); }
 
 /* Bar chart */
 .section { margin-bottom: 2rem; }
-.section-header {
-  display: flex; align-items: center; gap: 8px; margin-bottom: 14px;
-}
+.section-header { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
 .section-title { font-size: 13px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.06em; }
-.badge {
-  font-size: 11px; padding: 2px 9px; border-radius: 20px;
-  font-weight: 500;
-}
+.badge { font-size: 11px; padding: 2px 9px; border-radius: 20px; font-weight: 500; }
 .badge-velo { background: var(--blue-bg); color: var(--blue); }
 .badge-caps { background: var(--green-bg); color: var(--green); }
 
@@ -137,13 +163,11 @@ select:focus { border-color: var(--blue); }
 .bar-row { display: flex; align-items: center; gap: 10px; }
 .bar-name {
   font-size: 12px; color: var(--text2); width: 138px; flex-shrink: 0;
-  text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-  font-weight: 500;
+  text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500;
 }
 .bar-track {
   flex: 1; height: 24px; background: var(--surface2);
-  border-radius: 6px; overflow: hidden; min-width: 80px;
-  border: 1px solid var(--border);
+  border-radius: 6px; overflow: hidden; min-width: 80px; border: 1px solid var(--border);
 }
 .bar-fill {
   height: 100%; border-radius: 6px;
@@ -152,15 +176,12 @@ select:focus { border-color: var(--blue); }
 }
 .bar-pct { font-size: 11px; font-weight: 600; font-family: 'DM Mono', monospace; }
 .bar-chains { display: flex; gap: 4px; flex-shrink: 0; }
-.chain-tag {
-  font-size: 10px; padding: 2px 7px; border-radius: 10px; font-weight: 500;
-}
+.chain-tag { font-size: 10px; padding: 2px 7px; border-radius: 10px; font-weight: 500; }
 
 /* Alerts */
 .alert-grid {
   display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
-  gap: 10px; max-height: 520px; overflow-y: auto;
-  padding-right: 2px;
+  gap: 10px; max-height: 520px; overflow-y: auto; padding-right: 2px;
 }
 .alert-grid::-webkit-scrollbar { width: 4px; }
 .alert-grid::-webkit-scrollbar-track { background: var(--surface2); border-radius: 4px; }
@@ -175,10 +196,7 @@ select:focus { border-color: var(--blue); }
 .alert-card.warn { border-left-color: #d97706; }
 .alert-pos { font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 6px; line-height: 1.3; }
 .alert-tags { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
-.prom-tag {
-  font-size: 11px; padding: 2px 8px; border-radius: 20px;
-  background: var(--surface2); color: var(--text2); font-weight: 500;
-}
+.prom-tag { font-size: 11px; padding: 2px 8px; border-radius: 20px; background: var(--surface2); color: var(--text2); font-weight: 500; }
 .pct-tag { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 20px; font-family: 'DM Mono', monospace; }
 .pct-crit { background: var(--red-bg); color: var(--red); }
 .pct-warn { background: var(--amber-bg); color: var(--amber); }
@@ -195,9 +213,7 @@ select:focus { border-color: var(--blue); }
   cursor: pointer; transition: all .15s; box-shadow: var(--shadow);
 }
 .promo-btn:hover { background: var(--surface2); color: var(--text); }
-.promo-btn.active {
-  background: var(--text); color: #fff; border-color: var(--text);
-}
+.promo-btn.active { background: var(--text); color: #fff; border-color: var(--text); }
 
 /* Modal */
 .modal-overlay {
@@ -221,21 +237,13 @@ select:focus { border-color: var(--blue); }
   font-family: 'DM Sans', sans-serif;
   background: var(--surface2); border: 1px solid var(--border2);
   border-radius: 8px; padding: 5px 12px; cursor: pointer;
-  font-size: 12px; color: var(--text2); font-weight: 500;
-  transition: all .15s;
+  font-size: 12px; color: var(--text2); font-weight: 500; transition: all .15s;
 }
 .modal-close:hover { background: var(--surface); color: var(--text); }
-.modal-metrics {
-  display: grid; grid-template-columns: repeat(3, 1fr);
-  gap: 10px; margin-bottom: 1.25rem;
-}
-.modal-metric {
-  background: var(--surface2); border-radius: var(--radius);
-  padding: 12px 14px; border: 1px solid var(--border);
-}
+.modal-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1.25rem; }
+.modal-metric { background: var(--surface2); border-radius: var(--radius); padding: 12px 14px; border: 1px solid var(--border); }
 .modal-metric .lbl { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--text3); margin-bottom: 5px; }
 .modal-metric .val { font-size: 20px; font-weight: 600; font-family: 'DM Mono', monospace; }
-
 .modal-controls { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; align-items: center; }
 .cat-btns { display: flex; gap: 4px; }
 .cat-btn {
@@ -246,11 +254,7 @@ select:focus { border-color: var(--blue); }
 }
 .cat-btn.active { background: var(--text); color: #fff; border-color: var(--text); }
 .modal-sort { margin-left: auto; }
-
-.table-wrap {
-  max-height: 360px; overflow-y: auto;
-  border: 1px solid var(--border); border-radius: var(--radius);
-}
+.table-wrap { max-height: 360px; overflow-y: auto; border: 1px solid var(--border); border-radius: var(--radius); }
 .table-wrap::-webkit-scrollbar { width: 4px; }
 .table-wrap::-webkit-scrollbar-track { background: var(--surface2); }
 .table-wrap::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
@@ -262,21 +266,16 @@ thead th {
   text-transform: uppercase; letter-spacing: .05em;
   border-bottom: 1px solid var(--border2);
 }
-tbody td {
-  padding: 8px 12px; border-bottom: 1px solid var(--border);
-  color: var(--text);
-}
+tbody td { padding: 8px 12px; border-bottom: 1px solid var(--border); color: var(--text); }
 tbody tr:last-child td { border-bottom: none; }
 tbody tr:hover td { background: var(--surface2); }
 .num { text-align: right; font-family: 'DM Mono', monospace; font-size: 12px; }
 .pct-pill {
   display: inline-block; padding: 2px 9px; border-radius: 20px;
-  font-size: 11px; font-weight: 600; font-family: 'DM Mono', monospace;
-  white-space: nowrap;
+  font-size: 11px; font-weight: 600; font-family: 'DM Mono', monospace; white-space: nowrap;
 }
 .empty-row td { text-align: center; color: var(--text3); padding: 2rem; }
 
-/* Responsive */
 @media (max-width: 680px) {
   .metrics { grid-template-columns: repeat(2, 1fr); }
   .modal-metrics { grid-template-columns: repeat(2, 1fr); }
@@ -285,7 +284,16 @@ tbody tr:hover td { background: var(--surface2); }
 </style>
 </head>
 <body>
-<div class="page">
+
+<!-- Loading -->
+<div id="loadingScreen">
+  <div class="spinner"></div>
+  <div class="loading-txt">Cargando datos desde Google Sheets…</div>
+</div>
+
+<div class="page" id="mainContent" style="display:none">
+
+  <div id="errorBanner"></div>
 
   <!-- HEADER -->
   <div class="header">
@@ -294,21 +302,29 @@ tbody tr:hover td { background: var(--surface2); }
       <h1 class="header-title">Dashboard Conectados — Marzo 2026</h1>
       <p class="header-sub">Seguimiento por promotor, categoría y cadena</p>
     </div>
-    <div class="filters">
-      <label>Cadena:</label>
-      <select id="cadenaFilter" onchange="render()">
-        <option value="ALL">Todas las cadenas</option>
-        <option value="TAMBO">TAMBO</option>
-        <option value="OXXO">OXXO</option>
-        <option value="PRIMAX">PRIMAX</option>
-        <option value="AVA">AVA</option>
-      </select>
-      <label>Categoría:</label>
-      <select id="catFilter" onchange="render()">
-        <option value="ALL">Todas</option>
-        <option value="VELO">Velo</option>
-        <option value="LS CAPS">LS Caps</option>
-      </select>
+    <div class="header-right">
+      <div class="filters">
+        <label>Cadena:</label>
+        <select id="cadenaFilter" onchange="render()">
+          <option value="ALL">Todas las cadenas</option>
+          <option value="TAMBO">TAMBO</option>
+          <option value="OXXO">OXXO</option>
+          <option value="PRIMAX">PRIMAX</option>
+          <option value="AVA">AVA</option>
+        </select>
+        <label>Categoría:</label>
+        <select id="catFilter" onchange="render()">
+          <option value="ALL">Todas</option>
+          <option value="Velo">Velo</option>
+          <option value="LS Caps">LS Caps</option>
+        </select>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <span class="last-update" id="lastUpdate"></span>
+        <button class="refresh-btn" onclick="loadData()" id="refreshBtn">
+          <span>↺</span> Actualizar datos
+        </button>
+      </div>
     </div>
   </div>
 
@@ -347,7 +363,7 @@ tbody tr:hover td { background: var(--surface2); }
     </div>
   </div>
 
-</div><!-- /page -->
+</div>
 
 <!-- MODAL -->
 <div class="modal-overlay" id="modalOverlay" onclick="handleOverlayClick(event)">
@@ -363,8 +379,8 @@ tbody tr:hover td { background: var(--surface2); }
     <div class="modal-controls">
       <div class="cat-btns">
         <button class="cat-btn active" onclick="setModalCat('ALL',this)">Todas</button>
-        <button class="cat-btn" onclick="setModalCat('VELO',this)">Velo</button>
-        <button class="cat-btn" onclick="setModalCat('LS CAPS',this)">LS Caps</button>
+        <button class="cat-btn" onclick="setModalCat('Velo',this)">Velo</button>
+        <button class="cat-btn" onclick="setModalCat('LS Caps',this)">LS Caps</button>
       </div>
       <div class="modal-sort">
         <select id="modalSort" onchange="renderModalTable()" style="font-size:12px;padding:4px 10px">
@@ -393,282 +409,229 @@ tbody tr:hover td { background: var(--surface2); }
 </div>
 
 <script>
-// ── DATA ──────────────────────────────────────────────────────────────────────
-const RAW = [
-  {PROMOTOR:"CECILIA GUERRERO",CATEGORIA:"LS CAPS",CADENA:"PRIMAX",cuota:624.4,avance:562,avance_pct:0.9001},
-  {PROMOTOR:"CECILIA GUERRERO",CATEGORIA:"VELO",CADENA:"AVA",cuota:25.0,avance:6,avance_pct:0.24},
-  {PROMOTOR:"CECILIA GUERRERO",CATEGORIA:"VELO",CADENA:"PRIMAX",cuota:75.15,avance:40,avance_pct:0.5323},
-  {PROMOTOR:"EDWARD RODRIGUEZ",CATEGORIA:"LS CAPS",CADENA:"OXXO",cuota:53.35,avance:35,avance_pct:0.656},
-  {PROMOTOR:"EDWARD RODRIGUEZ",CATEGORIA:"LS CAPS",CADENA:"PRIMAX",cuota:501.2,avance:413,avance_pct:0.824},
-  {PROMOTOR:"EDWARD RODRIGUEZ",CATEGORIA:"VELO",CADENA:"OXXO",cuota:89.57,avance:19,avance_pct:0.2121},
-  {PROMOTOR:"EDWARD RODRIGUEZ",CATEGORIA:"VELO",CADENA:"PRIMAX",cuota:196.13,avance:62,avance_pct:0.3161},
-  {PROMOTOR:"EDWARD RODRIGUEZ",CATEGORIA:"VELO",CADENA:"TAMBO",cuota:202.0,avance:53,avance_pct:0.2624},
-  {PROMOTOR:"EMMELINE PEREYRA",CATEGORIA:"LS CAPS",CADENA:"PRIMAX",cuota:118.65,avance:71,avance_pct:0.5984},
-  {PROMOTOR:"GIANFRANCO AREVALO",CATEGORIA:"LS CAPS",CADENA:"PRIMAX",cuota:525.35,avance:554,avance_pct:1.0545},
-  {PROMOTOR:"GIANFRANCO AREVALO",CATEGORIA:"VELO",CADENA:"OXXO",cuota:38.3,avance:12,avance_pct:0.3133},
-  {PROMOTOR:"GIANFRANCO AREVALO",CATEGORIA:"VELO",CADENA:"PRIMAX",cuota:62.95,avance:25,avance_pct:0.3971},
-  {PROMOTOR:"GIANFRANCO AREVALO",CATEGORIA:"VELO",CADENA:"TAMBO",cuota:54.0,avance:10,avance_pct:0.1852},
-  {PROMOTOR:"JENNY VALLADARES",CATEGORIA:"LS CAPS",CADENA:"OXXO",cuota:459.0,avance:424,avance_pct:0.9237},
-  {PROMOTOR:"JENNY VALLADARES",CATEGORIA:"LS CAPS",CADENA:"PRIMAX",cuota:167.3,avance:158,avance_pct:0.9444},
-  {PROMOTOR:"JENNY VALLADARES",CATEGORIA:"VELO",CADENA:"OXXO",cuota:86.1,avance:24,avance_pct:0.2787},
-  {PROMOTOR:"JENNY VALLADARES",CATEGORIA:"VELO",CADENA:"PRIMAX",cuota:99.75,avance:37,avance_pct:0.3709},
-  {PROMOTOR:"JENNY VALLADARES",CATEGORIA:"VELO",CADENA:"TAMBO",cuota:296.0,avance:27,avance_pct:0.0912},
-  {PROMOTOR:"JESSENIA ARELLANO",CATEGORIA:"LS CAPS",CADENA:"OXXO",cuota:196.25,avance:120,avance_pct:0.6115},
-  {PROMOTOR:"JESSENIA ARELLANO",CATEGORIA:"VELO",CADENA:"OXXO",cuota:64.18,avance:16,avance_pct:0.2493},
-  {PROMOTOR:"JESSENIA ARELLANO",CATEGORIA:"VELO",CADENA:"PRIMAX",cuota:18.55,avance:8,avance_pct:0.4313},
-  {PROMOTOR:"JESSENIA ARELLANO",CATEGORIA:"VELO",CADENA:"TAMBO",cuota:265.0,avance:35,avance_pct:0.1321},
-  {PROMOTOR:"JHORDAN LOPEZ",CATEGORIA:"LS CAPS",CADENA:"PRIMAX",cuota:115.15,avance:96,avance_pct:0.8337},
-  {PROMOTOR:"JHORDAN LOPEZ",CATEGORIA:"VELO",CADENA:"PRIMAX",cuota:33.75,avance:34,avance_pct:1.0074},
-  {PROMOTOR:"JHORDAN LOPEZ",CATEGORIA:"VELO",CADENA:"TAMBO",cuota:40.0,avance:0,avance_pct:0.0},
-  {PROMOTOR:"JOSE BENDEZÚ",CATEGORIA:"LS CAPS",CADENA:"OXXO",cuota:938.48,avance:789,avance_pct:0.8407},
-  {PROMOTOR:"JOSE BENDEZÚ",CATEGORIA:"LS CAPS",CADENA:"PRIMAX",cuota:812.7,avance:644,avance_pct:0.7924},
-  {PROMOTOR:"JOSE BENDEZÚ",CATEGORIA:"VELO",CADENA:"AVA",cuota:35.0,avance:51,avance_pct:1.4571},
-  {PROMOTOR:"JOSE BENDEZÚ",CATEGORIA:"VELO",CADENA:"OXXO",cuota:230.81,avance:94,avance_pct:0.4073},
-  {PROMOTOR:"JOSE BENDEZÚ",CATEGORIA:"VELO",CADENA:"PRIMAX",cuota:175.03,avance:70,avance_pct:0.3999},
-  {PROMOTOR:"JOSE BENDEZÚ",CATEGORIA:"VELO",CADENA:"TAMBO",cuota:312.0,avance:55,avance_pct:0.1763},
-  {PROMOTOR:"KELLY BAZAN",CATEGORIA:"LS CAPS",CADENA:"PRIMAX",cuota:509.25,avance:506,avance_pct:0.9936},
-  {PROMOTOR:"KELLY BAZAN",CATEGORIA:"VELO",CADENA:"PRIMAX",cuota:15.0,avance:4,avance_pct:0.2667},
-  {PROMOTOR:"MILEYDI BALCAZAR",CATEGORIA:"LS CAPS",CADENA:"OXXO",cuota:480.25,avance:375,avance_pct:0.7808},
-  {PROMOTOR:"MILEYDI BALCAZAR",CATEGORIA:"LS CAPS",CADENA:"PRIMAX",cuota:331.8,avance:264,avance_pct:0.7957},
-  {PROMOTOR:"MILEYDI BALCAZAR",CATEGORIA:"VELO",CADENA:"AVA",cuota:50.0,avance:49,avance_pct:0.98},
-  {PROMOTOR:"MILEYDI BALCAZAR",CATEGORIA:"VELO",CADENA:"OXXO",cuota:469.85,avance:199,avance_pct:0.4235},
-  {PROMOTOR:"MILEYDI BALCAZAR",CATEGORIA:"VELO",CADENA:"PRIMAX",cuota:143.03,avance:67,avance_pct:0.4684},
-  {PROMOTOR:"MILEYDI BALCAZAR",CATEGORIA:"VELO",CADENA:"TAMBO",cuota:454.0,avance:111,avance_pct:0.2445},
-  {PROMOTOR:"RENATO BRICEÑO",CATEGORIA:"LS CAPS",CADENA:"OXXO",cuota:63.0,avance:53,avance_pct:0.8413},
-  {PROMOTOR:"RENATO BRICEÑO",CATEGORIA:"LS CAPS",CADENA:"PRIMAX",cuota:249.2,avance:123,avance_pct:0.4936},
-  {PROMOTOR:"RENATO BRICEÑO",CATEGORIA:"VELO",CADENA:"OXXO",cuota:70.23,avance:51,avance_pct:0.7262},
-  {PROMOTOR:"RENATO BRICEÑO",CATEGORIA:"VELO",CADENA:"PRIMAX",cuota:99.14,avance:53,avance_pct:0.5346},
-  {PROMOTOR:"RENATO BRICEÑO",CATEGORIA:"VELO",CADENA:"TAMBO",cuota:8.0,avance:2,avance_pct:0.25},
-  {PROMOTOR:"SANDRA VILLAFANA",CATEGORIA:"LS CAPS",CADENA:"PRIMAX",cuota:462.0,avance:40,avance_pct:0.0866},
-  {PROMOTOR:"SARAI AZO",CATEGORIA:"LS CAPS",CADENA:"PRIMAX",cuota:1442.35,avance:1090,avance_pct:0.7557},
-  {PROMOTOR:"SARAI AZO",CATEGORIA:"VELO",CADENA:"AVA",cuota:20.0,avance:10,avance_pct:0.5},
-  {PROMOTOR:"SARAI AZO",CATEGORIA:"VELO",CADENA:"PRIMAX",cuota:124.4,avance:39,avance_pct:0.3135},
-  {PROMOTOR:"SHEILA CASANOVA",CATEGORIA:"LS CAPS",CADENA:"OXXO",cuota:248.48,avance:208,avance_pct:0.8371},
-  {PROMOTOR:"SHEILA CASANOVA",CATEGORIA:"LS CAPS",CADENA:"PRIMAX",cuota:61.6,avance:57,avance_pct:0.9253},
-  {PROMOTOR:"SHEILA CASANOVA",CATEGORIA:"VELO",CADENA:"OXXO",cuota:94.7,avance:45,avance_pct:0.4752},
-  {PROMOTOR:"SHEILA CASANOVA",CATEGORIA:"VELO",CADENA:"PRIMAX",cuota:55.1,avance:41,avance_pct:0.7441},
-  {PROMOTOR:"SHEILA CASANOVA",CATEGORIA:"VELO",CADENA:"TAMBO",cuota:117.0,avance:17,avance_pct:0.1453},
-  {PROMOTOR:"SINTHIA IZAGUIRRE",CATEGORIA:"LS CAPS",CADENA:"OXXO",cuota:295.23,avance:168,avance_pct:0.569},
-  {PROMOTOR:"SINTHIA IZAGUIRRE",CATEGORIA:"VELO",CADENA:"OXXO",cuota:35.85,avance:14,avance_pct:0.3905},
-  {PROMOTOR:"STEPHANY APUMAYTA",CATEGORIA:"LS CAPS",CADENA:"OXXO",cuota:995.83,avance:848,avance_pct:0.8515},
-  {PROMOTOR:"STEPHANY APUMAYTA",CATEGORIA:"LS CAPS",CADENA:"PRIMAX",cuota:1056.65,avance:921,avance_pct:0.8716},
-  {PROMOTOR:"STEPHANY APUMAYTA",CATEGORIA:"VELO",CADENA:"AVA",cuota:26.0,avance:13,avance_pct:0.5},
-  {PROMOTOR:"STEPHANY APUMAYTA",CATEGORIA:"VELO",CADENA:"OXXO",cuota:268.73,avance:98,avance_pct:0.3647},
-  {PROMOTOR:"STEPHANY APUMAYTA",CATEGORIA:"VELO",CADENA:"PRIMAX",cuota:372.33,avance:196,avance_pct:0.5264},
-  {PROMOTOR:"STEPHANY APUMAYTA",CATEGORIA:"VELO",CADENA:"TAMBO",cuota:616.0,avance:287,avance_pct:0.4659},
-  {PROMOTOR:"VALERIA HUAMAN",CATEGORIA:"LS CAPS",CADENA:"OXXO",cuota:70.58,avance:58,avance_pct:0.8217},
-  {PROMOTOR:"VALERIA HUAMAN",CATEGORIA:"LS CAPS",CADENA:"PRIMAX",cuota:1171.1,avance:777,avance_pct:0.6635},
-  {PROMOTOR:"VALERIA HUAMAN",CATEGORIA:"VELO",CADENA:"AVA",cuota:5.0,avance:0,avance_pct:0.0},
-  {PROMOTOR:"VALERIA HUAMAN",CATEGORIA:"VELO",CADENA:"OXXO",cuota:200.49,avance:105,avance_pct:0.5237},
-  {PROMOTOR:"VALERIA HUAMAN",CATEGORIA:"VELO",CADENA:"PRIMAX",cuota:87.0,avance:64,avance_pct:0.7356},
-  {PROMOTOR:"WILLGERSON PAJITA",CATEGORIA:"LS CAPS",CADENA:"OXXO",cuota:141.65,avance:110,avance_pct:0.7766},
-  {PROMOTOR:"WILLGERSON PAJITA",CATEGORIA:"VELO",CADENA:"OXXO",cuota:78.07,avance:28,avance_pct:0.3586},
-  {PROMOTOR:"WILLGERSON PAJITA",CATEGORIA:"VELO",CADENA:"PRIMAX",cuota:30.75,avance:21,avance_pct:0.6829},
-  {PROMOTOR:"WILLGERSON PAJITA",CATEGORIA:"VELO",CADENA:"TAMBO",cuota:280.0,avance:39,avance_pct:0.1393},
-  {PROMOTOR:"YAQUELIN BORJA",CATEGORIA:"LS CAPS",CADENA:"OXXO",cuota:1211.0,avance:986,avance_pct:0.8142},
-  {PROMOTOR:"YAQUELIN BORJA",CATEGORIA:"LS CAPS",CADENA:"PRIMAX",cuota:734.3,avance:517,avance_pct:0.7041},
-  {PROMOTOR:"YAQUELIN BORJA",CATEGORIA:"VELO",CADENA:"AVA",cuota:40.0,avance:22,avance_pct:0.55},
-  {PROMOTOR:"YAQUELIN BORJA",CATEGORIA:"VELO",CADENA:"OXXO",cuota:351.96,avance:215,avance_pct:0.6109},
-  {PROMOTOR:"YAQUELIN BORJA",CATEGORIA:"VELO",CADENA:"PRIMAX",cuota:315.12,avance:154,avance_pct:0.4887},
-  {PROMOTOR:"YAQUELIN BORJA",CATEGORIA:"VELO",CADENA:"TAMBO",cuota:623.0,avance:227,avance_pct:0.3644},
-  {PROMOTOR:"YUBICSA ANGELES",CATEGORIA:"VELO",CADENA:"PRIMAX",cuota:5.0,avance:0,avance_pct:0.0}
-];
+// ── CONFIG ────────────────────────────────────────────────────────────────────
+const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7P-NJiClfQREuK_ih64aP9ImgNsOJA6N5DEamVDdon3QI0WaK9qgID5_7EG6zhu6-21nc-Qzlhyz3/pub?gid=0&single=true&output=csv';
+// Extracting sheet ID from the published URL for JSON API fallback
+const SHEET_ID_PUBLISHED = '2PACX-1vQ7P-NJiClfQREuK_ih64aP9ImgNsOJA6N5DEamVDdon3QI0WaK9qgID5_7EG6zhu6-21nc-Qzlhyz3';
 
-const POS_DATA = [
-  {p:"CECILIA GUERRERO",pos:"PRIMAX — LS Caps",c:"PRIMAX",cat:"LS CAPS",cuota:624.4,av:562,pct:0.9001},
-  {p:"CECILIA GUERRERO",pos:"AVA — Velo",c:"AVA",cat:"VELO",cuota:25.0,av:6,pct:0.24},
-  {p:"CECILIA GUERRERO",pos:"PRIMAX — Velo",c:"PRIMAX",cat:"VELO",cuota:75.15,av:40,pct:0.5323},
-  {p:"EDWARD RODRIGUEZ",pos:"OXXO — LS Caps",c:"OXXO",cat:"LS CAPS",cuota:53.35,av:35,pct:0.656},
-  {p:"EDWARD RODRIGUEZ",pos:"PRIMAX — LS Caps",c:"PRIMAX",cat:"LS CAPS",cuota:501.2,av:413,pct:0.824},
-  {p:"EDWARD RODRIGUEZ",pos:"OXXO — Velo",c:"OXXO",cat:"VELO",cuota:89.57,av:19,pct:0.2121},
-  {p:"EDWARD RODRIGUEZ",pos:"PRIMAX — Velo",c:"PRIMAX",cat:"VELO",cuota:196.13,av:62,pct:0.3161},
-  {p:"EDWARD RODRIGUEZ",pos:"TAMBO — Velo",c:"TAMBO",cat:"VELO",cuota:202.0,av:53,pct:0.2624},
-  {p:"EMMELINE PEREYRA",pos:"PRIMAX — LS Caps",c:"PRIMAX",cat:"LS CAPS",cuota:118.65,av:71,pct:0.5984},
-  {p:"GIANFRANCO AREVALO",pos:"PRIMAX — LS Caps",c:"PRIMAX",cat:"LS CAPS",cuota:525.35,av:554,pct:1.0545},
-  {p:"GIANFRANCO AREVALO",pos:"OXXO — Velo",c:"OXXO",cat:"VELO",cuota:38.3,av:12,pct:0.3133},
-  {p:"GIANFRANCO AREVALO",pos:"PRIMAX — Velo",c:"PRIMAX",cat:"VELO",cuota:62.95,av:25,pct:0.3971},
-  {p:"GIANFRANCO AREVALO",pos:"TAMBO — Velo",c:"TAMBO",cat:"VELO",cuota:54.0,av:10,pct:0.1852},
-  {p:"JENNY VALLADARES",pos:"OXXO — LS Caps",c:"OXXO",cat:"LS CAPS",cuota:459.0,av:424,pct:0.9237},
-  {p:"JENNY VALLADARES",pos:"PRIMAX — LS Caps",c:"PRIMAX",cat:"LS CAPS",cuota:167.3,av:158,pct:0.9444},
-  {p:"JENNY VALLADARES",pos:"OXXO — Velo",c:"OXXO",cat:"VELO",cuota:86.1,av:24,pct:0.2787},
-  {p:"JENNY VALLADARES",pos:"PRIMAX — Velo",c:"PRIMAX",cat:"VELO",cuota:99.75,av:37,pct:0.3709},
-  {p:"JENNY VALLADARES",pos:"TAMBO — Velo",c:"TAMBO",cat:"VELO",cuota:296.0,av:27,pct:0.0912},
-  {p:"JESSENIA ARELLANO",pos:"OXXO — LS Caps",c:"OXXO",cat:"LS CAPS",cuota:196.25,av:120,pct:0.6115},
-  {p:"JESSENIA ARELLANO",pos:"OXXO — Velo",c:"OXXO",cat:"VELO",cuota:64.18,av:16,pct:0.2493},
-  {p:"JESSENIA ARELLANO",pos:"PRIMAX — Velo",c:"PRIMAX",cat:"VELO",cuota:18.55,av:8,pct:0.4313},
-  {p:"JESSENIA ARELLANO",pos:"TAMBO — Velo",c:"TAMBO",cat:"VELO",cuota:265.0,av:35,pct:0.1321},
-  {p:"JHORDAN LOPEZ",pos:"PRIMAX — LS Caps",c:"PRIMAX",cat:"LS CAPS",cuota:115.15,av:96,pct:0.8337},
-  {p:"JHORDAN LOPEZ",pos:"PRIMAX — Velo",c:"PRIMAX",cat:"VELO",cuota:33.75,av:34,pct:1.0074},
-  {p:"JHORDAN LOPEZ",pos:"TAMBO — Velo",c:"TAMBO",cat:"VELO",cuota:40.0,av:0,pct:0.0},
-  {p:"JOSE BENDEZÚ",pos:"OXXO — LS Caps",c:"OXXO",cat:"LS CAPS",cuota:938.48,av:789,pct:0.8407},
-  {p:"JOSE BENDEZÚ",pos:"PRIMAX — LS Caps",c:"PRIMAX",cat:"LS CAPS",cuota:812.7,av:644,pct:0.7924},
-  {p:"JOSE BENDEZÚ",pos:"AVA — Velo",c:"AVA",cat:"VELO",cuota:35.0,av:51,pct:1.4571},
-  {p:"JOSE BENDEZÚ",pos:"OXXO — Velo",c:"OXXO",cat:"VELO",cuota:230.81,av:94,pct:0.4073},
-  {p:"JOSE BENDEZÚ",pos:"PRIMAX — Velo",c:"PRIMAX",cat:"VELO",cuota:175.03,av:70,pct:0.3999},
-  {p:"JOSE BENDEZÚ",pos:"TAMBO — Velo",c:"TAMBO",cat:"VELO",cuota:312.0,av:55,pct:0.1763},
-  {p:"KELLY BAZAN",pos:"PRIMAX — LS Caps",c:"PRIMAX",cat:"LS CAPS",cuota:509.25,av:506,pct:0.9936},
-  {p:"KELLY BAZAN",pos:"PRIMAX — Velo",c:"PRIMAX",cat:"VELO",cuota:15.0,av:4,pct:0.2667},
-  {p:"MILEYDI BALCAZAR",pos:"OXXO — LS Caps",c:"OXXO",cat:"LS CAPS",cuota:480.25,av:375,pct:0.7808},
-  {p:"MILEYDI BALCAZAR",pos:"PRIMAX — LS Caps",c:"PRIMAX",cat:"LS CAPS",cuota:331.8,av:264,pct:0.7957},
-  {p:"MILEYDI BALCAZAR",pos:"AVA — Velo",c:"AVA",cat:"VELO",cuota:50.0,av:49,pct:0.98},
-  {p:"MILEYDI BALCAZAR",pos:"OXXO — Velo",c:"OXXO",cat:"VELO",cuota:469.85,av:199,pct:0.4235},
-  {p:"MILEYDI BALCAZAR",pos:"PRIMAX — Velo",c:"PRIMAX",cat:"VELO",cuota:143.03,av:67,pct:0.4684},
-  {p:"MILEYDI BALCAZAR",pos:"TAMBO — Velo",c:"TAMBO",cat:"VELO",cuota:454.0,av:111,pct:0.2445},
-  {p:"RENATO BRICEÑO",pos:"OXXO — LS Caps",c:"OXXO",cat:"LS CAPS",cuota:63.0,av:53,pct:0.8413},
-  {p:"RENATO BRICEÑO",pos:"PRIMAX — LS Caps",c:"PRIMAX",cat:"LS CAPS",cuota:249.2,av:123,pct:0.4936},
-  {p:"RENATO BRICEÑO",pos:"OXXO — Velo",c:"OXXO",cat:"VELO",cuota:70.23,av:51,pct:0.7262},
-  {p:"RENATO BRICEÑO",pos:"PRIMAX — Velo",c:"PRIMAX",cat:"VELO",cuota:99.14,av:53,pct:0.5346},
-  {p:"RENATO BRICEÑO",pos:"TAMBO — Velo",c:"TAMBO",cat:"VELO",cuota:8.0,av:2,pct:0.25},
-  {p:"SANDRA VILLAFANA",pos:"PRIMAX — LS Caps",c:"PRIMAX",cat:"LS CAPS",cuota:462.0,av:40,pct:0.0866},
-  {p:"SARAI AZO",pos:"PRIMAX — LS Caps",c:"PRIMAX",cat:"LS CAPS",cuota:1442.35,av:1090,pct:0.7557},
-  {p:"SARAI AZO",pos:"AVA — Velo",c:"AVA",cat:"VELO",cuota:20.0,av:10,pct:0.5},
-  {p:"SARAI AZO",pos:"PRIMAX — Velo",c:"PRIMAX",cat:"VELO",cuota:124.4,av:39,pct:0.3135},
-  {p:"SHEILA CASANOVA",pos:"OXXO — LS Caps",c:"OXXO",cat:"LS CAPS",cuota:248.48,av:208,pct:0.8371},
-  {p:"SHEILA CASANOVA",pos:"PRIMAX — LS Caps",c:"PRIMAX",cat:"LS CAPS",cuota:61.6,av:57,pct:0.9253},
-  {p:"SHEILA CASANOVA",pos:"OXXO — Velo",c:"OXXO",cat:"VELO",cuota:94.7,av:45,pct:0.4752},
-  {p:"SHEILA CASANOVA",pos:"PRIMAX — Velo",c:"PRIMAX",cat:"VELO",cuota:55.1,av:41,pct:0.7441},
-  {p:"SHEILA CASANOVA",pos:"TAMBO — Velo",c:"TAMBO",cat:"VELO",cuota:117.0,av:17,pct:0.1453},
-  {p:"SINTHIA IZAGUIRRE",pos:"OXXO — LS Caps",c:"OXXO",cat:"LS CAPS",cuota:295.23,av:168,pct:0.569},
-  {p:"SINTHIA IZAGUIRRE",pos:"OXXO — Velo",c:"OXXO",cat:"VELO",cuota:35.85,av:14,pct:0.3905},
-  {p:"STEPHANY APUMAYTA",pos:"OXXO — LS Caps",c:"OXXO",cat:"LS CAPS",cuota:995.83,av:848,pct:0.8515},
-  {p:"STEPHANY APUMAYTA",pos:"PRIMAX — LS Caps",c:"PRIMAX",cat:"LS CAPS",cuota:1056.65,av:921,pct:0.8716},
-  {p:"STEPHANY APUMAYTA",pos:"AVA — Velo",c:"AVA",cat:"VELO",cuota:26.0,av:13,pct:0.5},
-  {p:"STEPHANY APUMAYTA",pos:"OXXO — Velo",c:"OXXO",cat:"VELO",cuota:268.73,av:98,pct:0.3647},
-  {p:"STEPHANY APUMAYTA",pos:"PRIMAX — Velo",c:"PRIMAX",cat:"VELO",cuota:372.33,av:196,pct:0.5264},
-  {p:"STEPHANY APUMAYTA",pos:"TAMBO — Velo",c:"TAMBO",cat:"VELO",cuota:616.0,av:287,pct:0.4659},
-  {p:"VALERIA HUAMAN",pos:"OXXO — LS Caps",c:"OXXO",cat:"LS CAPS",cuota:70.58,av:58,pct:0.8217},
-  {p:"VALERIA HUAMAN",pos:"PRIMAX — LS Caps",c:"PRIMAX",cat:"LS CAPS",cuota:1171.1,av:777,pct:0.6635},
-  {p:"VALERIA HUAMAN",pos:"AVA — Velo",c:"AVA",cat:"VELO",cuota:5.0,av:0,pct:0.0},
-  {p:"VALERIA HUAMAN",pos:"OXXO — Velo",c:"OXXO",cat:"VELO",cuota:200.49,av:105,pct:0.5237},
-  {p:"VALERIA HUAMAN",pos:"PRIMAX — Velo",c:"PRIMAX",cat:"VELO",cuota:87.0,av:64,pct:0.7356},
-  {p:"WILLGERSON PAJITA",pos:"OXXO — LS Caps",c:"OXXO",cat:"LS CAPS",cuota:141.65,av:110,pct:0.7766},
-  {p:"WILLGERSON PAJITA",pos:"OXXO — Velo",c:"OXXO",cat:"VELO",cuota:78.07,av:28,pct:0.3586},
-  {p:"WILLGERSON PAJITA",pos:"PRIMAX — Velo",c:"PRIMAX",cat:"VELO",cuota:30.75,av:21,pct:0.6829},
-  {p:"WILLGERSON PAJITA",pos:"TAMBO — Velo",c:"TAMBO",cat:"VELO",cuota:280.0,av:39,pct:0.1393},
-  {p:"YAQUELIN BORJA",pos:"OXXO — LS Caps",c:"OXXO",cat:"LS CAPS",cuota:1211.0,av:986,pct:0.8142},
-  {p:"YAQUELIN BORJA",pos:"PRIMAX — LS Caps",c:"PRIMAX",cat:"LS CAPS",cuota:734.3,av:517,pct:0.7041},
-  {p:"YAQUELIN BORJA",pos:"AVA — Velo",c:"AVA",cat:"VELO",cuota:40.0,av:22,pct:0.55},
-  {p:"YAQUELIN BORJA",pos:"OXXO — Velo",c:"OXXO",cat:"VELO",cuota:351.96,av:215,pct:0.6109},
-  {p:"YAQUELIN BORJA",pos:"PRIMAX — Velo",c:"PRIMAX",cat:"VELO",cuota:315.12,av:154,pct:0.4887},
-  {p:"YAQUELIN BORJA",pos:"TAMBO — Velo",c:"TAMBO",cat:"VELO",cuota:623.0,av:227,pct:0.3644},
-  {p:"YUBICSA ANGELES",pos:"PRIMAX — Velo",c:"PRIMAX",cat:"VELO",cuota:5.0,av:0,pct:0.0}
-];
+// ── STATE ─────────────────────────────────────────────────────────────────────
+let ALL_ROWS = []; // raw POS-level rows from sheet
 
-const LOW_RAW = [
-  {pos:"TAMBO - SAN LUIS-C9",p:"EDWARD RODRIGUEZ",c:"TAMBO",cat:"VELO",pct:0.25},
-  {pos:"TAMBO - ROSATORO",p:"EDWARD RODRIGUEZ",c:"TAMBO",cat:"VELO",pct:0.0},
-  {pos:"TAMBO - BRIGIDA-C1",p:"JENNY VALLADARES",c:"TAMBO",cat:"VELO",pct:0.0},
-  {pos:"TAMBO - PUNTA HERMOSA 3",p:"GIANFRANCO AREVALO",c:"TAMBO",cat:"VELO",pct:0.125},
-  {pos:"TAMBO - MATARA-C3-CUSCO",p:"JHORDAN LOPEZ",c:"TAMBO",cat:"VELO",pct:0.0},
-  {pos:"TAMBO - UNIVERSITARIA",p:"JOSE BENDEZÚ",c:"TAMBO",cat:"VELO",pct:0.0},
-  {pos:"TAMBO - ORUE",p:"MILEYDI BALCAZAR",c:"TAMBO",cat:"VELO",pct:0.125},
-  {pos:"TAMBO - BASE NAVAL",p:"RENATO BRICEÑO",c:"TAMBO",cat:"VELO",pct:0.25},
-  {pos:"TAMBO - PANDO",p:"SHEILA CASANOVA",c:"TAMBO",cat:"VELO",pct:0.125},
-  {pos:"TAMBO - ANGAMOS C12",p:"STEPHANY APUMAYTA",c:"TAMBO",cat:"VELO",pct:0.0},
-  {pos:"TAMBO - NAZARENAS",p:"YAQUELIN BORJA",c:"TAMBO",cat:"VELO",pct:0.0},
-  {pos:"TAMBO - TDA ALCAZAR",p:"WILLGERSON PAJITA",c:"TAMBO",cat:"VELO",pct:0.125},
-  {pos:"TAMBO - PROCERES-SURCO",p:"JESSENIA ARELLANO",c:"TAMBO",cat:"VELO",pct:0.125},
-  {pos:"TAMBO - DIAGONAL",p:"STEPHANY APUMAYTA",c:"TAMBO",cat:"VELO",pct:0.46},
-  {pos:"OXXO - INDUSTRIAL",p:"EDWARD RODRIGUEZ",c:"OXXO",cat:"VELO",pct:0.22},
-  {pos:"OXXO - AYABACA",p:"SINTHIA IZAGUIRRE",c:"OXXO",cat:"VELO",pct:0.0},
-  {pos:"OXXO - SUNSET",p:"GIANFRANCO AREVALO",c:"OXXO",cat:"VELO",pct:0.38},
-  {pos:"OXXO - ESCARDO",p:"JENNY VALLADARES",c:"OXXO",cat:"VELO",pct:0.4},
-  {pos:"OXXO - LEAL",p:"MILEYDI BALCAZAR",c:"OXXO",cat:"VELO",pct:0.39},
-  {pos:"OXXO - LIBERTAD",p:"JENNY VALLADARES",c:"OXXO",cat:"LS CAPS",pct:0.484},
-  {pos:"OXXO - SAUCO",p:"MILEYDI BALCAZAR",c:"OXXO",cat:"LS CAPS",pct:0.45},
-  {pos:"OXXO - AMARU",p:"SINTHIA IZAGUIRRE",c:"OXXO",cat:"LS CAPS",pct:0.393},
-  {pos:"OXXO - ROETGEN",p:"STEPHANY APUMAYTA",c:"OXXO",cat:"LS CAPS",pct:0.392},
-  {pos:"PRIMAX - E/S AMERICA NORTE 2",p:"CECILIA GUERRERO",c:"PRIMAX",cat:"VELO",pct:0.2},
-  {pos:"PRIMAX - E/S FRUTALES",p:"EDWARD RODRIGUEZ",c:"PRIMAX",cat:"VELO",pct:0.4},
-  {pos:"PRIMAX - TIENDA PETROSUR",p:"GIANFRANCO AREVALO",c:"PRIMAX",cat:"VELO",pct:0.308},
-  {pos:"PRIMAX - E/S TOMAS VALLE",p:"JENNY VALLADARES",c:"PRIMAX",cat:"VELO",pct:0.2},
-  {pos:"PRIMAX - E/S TAVIRSA",p:"JESSENIA ARELLANO",c:"PRIMAX",cat:"VELO",pct:0.2},
-  {pos:"PRIMAX - E/S TINGO MARIA",p:"JOSE BENDEZÚ",c:"PRIMAX",cat:"VELO",pct:0.0},
-  {pos:"PRIMAX - E/S INTERNACIONAL",p:"KELLY BAZAN",c:"PRIMAX",cat:"VELO",pct:0.0},
-  {pos:"PRIMAX - E/S JAVIER PRADO",p:"MILEYDI BALCAZAR",c:"PRIMAX",cat:"VELO",pct:0.2},
-  {pos:"PRIMAX - E/S SARAPAMPA 2",p:"RENATO BRICEÑO",c:"PRIMAX",cat:"VELO",pct:0.2},
-  {pos:"PRIMAX - E/S ASIA",p:"RENATO BRICEÑO",c:"PRIMAX",cat:"LS CAPS",pct:0.357},
-  {pos:"PRIMAX - E/S PERU",p:"SARAI AZO",c:"PRIMAX",cat:"VELO",pct:0.0},
-  {pos:"PRIMAX - E/S SUCRE",p:"SHEILA CASANOVA",c:"PRIMAX",cat:"VELO",pct:0.2},
-  {pos:"PRIMAX - LISTO PRIMAVERA",p:"STEPHANY APUMAYTA",c:"PRIMAX",cat:"VELO",pct:0.0},
-  {pos:"PRIMAX - E/S LANIFICIO",p:"VALERIA HUAMAN",c:"PRIMAX",cat:"VELO",pct:0.4},
-  {pos:"PRIMAX - LISTO GARZON",p:"WILLGERSON PAJITA",c:"PRIMAX",cat:"VELO",pct:0.2},
-  {pos:"PRIMAX - E/S FERRARI",p:"YAQUELIN BORJA",c:"PRIMAX",cat:"VELO",pct:0.2},
-  {pos:"PRIMAX - E/S SAN JOSE",p:"YUBICSA ANGELES",c:"PRIMAX",cat:"VELO",pct:0.0},
-  {pos:"PECSA - E/S NUEVO CHIMBOTE",p:"SANDRA VILLAFANA",c:"PRIMAX",cat:"LS CAPS",pct:0.087},
-  {pos:"AVA - FLORES DEL GOLF",p:"CECILIA GUERRERO",c:"AVA",cat:"VELO",pct:0.24},
-  {pos:"AVA - PUEBLO LIBRE",p:"JOSE BENDEZÚ",c:"AVA",cat:"VELO",pct:0.0},
-  {pos:"AVA - LOMA",p:"SARAI AZO",c:"AVA",cat:"VELO",pct:0.4},
-  {pos:"AVA - PIURA",p:"SARAI AZO",c:"AVA",cat:"VELO",pct:0.0},
-  {pos:"AVA - ESPINAR",p:"STEPHANY APUMAYTA",c:"AVA",cat:"VELO",pct:0.47},
-  {pos:"AVA - LA FONDA",p:"VALERIA HUAMAN",c:"AVA",cat:"VELO",pct:0.0},
-  {pos:"AVA - BARRANCO",p:"YAQUELIN BORJA",c:"AVA",cat:"VELO",pct:0.09}
-];
+// ── CSV PARSER ────────────────────────────────────────────────────────────────
+function parseCSV(text) {
+  const lines = text.trim().split('\n');
+  if (lines.length < 2) return [];
+  const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
+  return lines.slice(1).map(line => {
+    // Handle quoted fields with commas inside
+    const vals = [];
+    let cur = '', inQ = false;
+    for (let i = 0; i < line.length; i++) {
+      const ch = line[i];
+      if (ch === '"') { inQ = !inQ; }
+      else if (ch === ',' && !inQ) { vals.push(cur.trim()); cur = ''; }
+      else { cur += ch; }
+    }
+    vals.push(cur.trim());
+    const obj = {};
+    headers.forEach((h, i) => { obj[h] = (vals[i] || '').replace(/^"|"$/g, '').trim(); });
+    return obj;
+  }).filter(r => r[headers[0]]); // skip empty rows
+}
+
+// ── LOAD DATA ─────────────────────────────────────────────────────────────────
+async function loadData() {
+  const btn = document.getElementById('refreshBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner" style="width:14px;height:14px;border-width:2px;display:inline-block"></span> Cargando…';
+
+  try {
+    // Try multiple CORS proxies in order
+    const proxies = [
+      'https://api.allorigins.win/raw?url=' + encodeURIComponent(SHEET_CSV_URL),
+      'https://corsproxy.io/?' + encodeURIComponent(SHEET_CSV_URL),
+      'https://cors-anywhere.herokuapp.com/' + SHEET_CSV_URL,
+    ];
+
+    let text = null;
+    let lastErr = null;
+    for (const url of proxies) {
+      try {
+        const resp = await fetch(url, {signal: AbortSignal.timeout(8000)});
+        if (resp.ok) { text = await resp.text(); break; }
+      } catch(e) { lastErr = e; }
+    }
+    if (!text) throw new Error('No se pudo conectar con Google Sheets. Intenta de nuevo en unos segundos.');
+    const rows = parseCSV(text);
+
+    if (!rows.length) throw new Error('El Sheet está vacío o sin datos');
+
+    // Detect columns (flexible mapping)
+    const sample = rows[0];
+    const keys = Object.keys(sample);
+
+    // Find column names dynamically
+    const findCol = (...candidates) => candidates.find(c => keys.find(k => k.toUpperCase() === c.toUpperCase()));
+    const colCadena    = findCol('CADENA');
+    const colPos       = findCol('POS TT AUDIT', 'POS', 'POS_TT_AUDIT');
+    const colPromotor  = findCol('PROMOTOR');
+    const colCat       = findCol('CATEGORIA', 'CATEGORÍA');
+    const colCuota     = findCol('CUOTA');
+    const colAvance    = findCol('AVANCE AL 22', 'AVANCE', 'AVANCE AL22');
+    const colPct       = findCol('AVANCE %', 'AVANCE%', 'AVANCE_PCT');
+
+    if (!colCadena || !colPromotor || !colCat || !colCuota || !colAvance) {
+      throw new Error(`Columnas no encontradas. Encontradas: ${keys.join(', ')}`);
+    }
+
+    ALL_ROWS = rows.map(r => {
+      const cuota = parseFloat((r[colCuota] || '0').replace('%','').replace(',','.')) || 0;
+      const avance = parseFloat((r[colAvance] || '0').replace('%','').replace(',','.')) || 0;
+      // pct: if column has % sign or value > 1 assume it's 0-100 scale
+      let pctRaw = parseFloat((r[colPct] || '0').replace('%','').replace(',','.')) || 0;
+      // If pct > 1.5, assume it's stored as 0-100 (e.g. "25" means 25%)
+      const pct = pctRaw > 1.5 ? pctRaw / 100 : pctRaw;
+
+      return {
+        cadena:    (r[colCadena] || '').toUpperCase().trim(),
+        pos:       r[colPos] || '',
+        promotor:  (r[colPromotor] || '').toUpperCase().trim(),
+        categoria: (r[colCat] || '').trim(),
+        cuota,
+        avance,
+        pct: cuota > 0 ? avance / cuota : pct
+      };
+    }).filter(r => r.cadena && r.promotor);
+
+    document.getElementById('lastUpdate').textContent = 'Actualizado ' + new Date().toLocaleTimeString('es-PE', {hour:'2-digit',minute:'2-digit'});
+    document.getElementById('errorBanner').style.display = 'none';
+    render();
+
+  } catch (err) {
+    const banner = document.getElementById('errorBanner');
+    banner.style.display = 'block';
+    banner.textContent = '⚠️ Error al cargar datos: ' + err.message + '. Verifica que el Sheet esté publicado correctamente.';
+    console.error(err);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<span>↺</span> Actualizar datos';
+    document.getElementById('loadingScreen').style.display = 'none';
+    document.getElementById('mainContent').style.display = 'block';
+  }
+}
 
 // ── HELPERS ───────────────────────────────────────────────────────────────────
-const CC = {TAMBO:{c:'var(--tambo-c)',bg:'var(--tambo-bg)'},OXXO:{c:'var(--oxxo-c)',bg:'var(--oxxo-bg)'},PRIMAX:{c:'var(--primax-c)',bg:'var(--primax-bg)'},AVA:{c:'var(--ava-c)',bg:'var(--ava-bg)'}};
+const CC = {
+  TAMBO:  {c:'var(--tambo-c)',  bg:'var(--tambo-bg)'},
+  OXXO:   {c:'var(--oxxo-c)',   bg:'var(--oxxo-bg)'},
+  PRIMAX: {c:'var(--primax-c)', bg:'var(--primax-bg)'},
+  AVA:    {c:'var(--ava-c)',    bg:'var(--ava-bg)'},
+  PECSA:  {c:'var(--primax-c)', bg:'var(--primax-bg)'},
+};
 
-function pctColor(p){
-  if(p>=1) return {c:'var(--green)',bg:'var(--green-bg)'};
-  if(p>=0.75) return {c:'#2d7a3a',bg:'#e8f5eb'};
-  if(p>=0.5) return {c:'var(--amber)',bg:'var(--amber-bg)'};
-  return {c:'var(--red)',bg:'var(--red-bg)'};
+function pctColor(p) {
+  if (p >= 1)    return {c:'var(--green)',  bg:'var(--green-bg)'};
+  if (p >= 0.75) return {c:'#2d7a3a',      bg:'#e8f5eb'};
+  if (p >= 0.5)  return {c:'var(--amber)',  bg:'var(--amber-bg)'};
+  return             {c:'var(--red)',    bg:'var(--red-bg)'};
 }
 
-function pill(p, cls=''){
+function pill(p) {
   const {c,bg} = pctColor(p);
-  return `<span class="pct-pill ${cls}" style="color:${c};background:${bg}">${(p*100).toFixed(1)}%</span>`;
+  return `<span class="pct-pill" style="color:${c};background:${bg}">${(p*100).toFixed(1)}%</span>`;
 }
 
-function chainTag(c){
-  const s = CC[c] || {c:'#888',bg:'#eee'};
+function chainTag(c) {
+  const s = CC[c] || {c:'#888', bg:'#eee'};
   return `<span class="chain-tag" style="color:${s.c};background:${s.bg}">${c}</span>`;
 }
 
-function catTag(cat){
-  if(cat==='VELO') return `<span class="chain-tag" style="color:var(--blue);background:var(--blue-bg)">VELO</span>`;
-  return `<span class="chain-tag" style="color:var(--green);background:var(--green-bg)">LS CAPS</span>`;
+function catTag(cat) {
+  const isVelo = cat.toUpperCase().includes('VELO');
+  return isVelo
+    ? `<span class="chain-tag" style="color:var(--blue);background:var(--blue-bg)">Velo</span>`
+    : `<span class="chain-tag" style="color:var(--green);background:var(--green-bg)">LS Caps</span>`;
 }
 
-function getFilters(){
-  return {cadena: document.getElementById('cadenaFilter').value, cat: document.getElementById('catFilter').value};
+function getFilters() {
+  return {
+    cadena: document.getElementById('cadenaFilter').value,
+    cat:    document.getElementById('catFilter').value
+  };
 }
 
-function filterRaw(){
+function filterRows() {
   const f = getFilters();
-  return RAW.filter(d => (f.cadena==='ALL'||d.CADENA===f.cadena) && (f.cat==='ALL'||d.CATEGORIA===f.cat));
+  return ALL_ROWS.filter(r =>
+    (f.cadena === 'ALL' || r.cadena === f.cadena) &&
+    (f.cat === 'ALL' || r.categoria.toUpperCase() === f.cat.toUpperCase())
+  );
+}
+
+// ── AGGREGATE: RAW (promotor+categoria+cadena) ────────────────────────────────
+function getRAW(rows) {
+  const map = {};
+  rows.forEach(r => {
+    const key = `${r.promotor}||${r.categoria}||${r.cadena}`;
+    if (!map[key]) map[key] = {PROMOTOR: r.promotor, CATEGORIA: r.categoria, CADENA: r.cadena, cuota: 0, avance: 0};
+    map[key].cuota  += r.cuota;
+    map[key].avance += r.avance;
+  });
+  return Object.values(map).map(d => ({
+    ...d,
+    avance_pct: d.cuota > 0 ? d.avance / d.cuota : 0
+  }));
 }
 
 // ── METRICS ───────────────────────────────────────────────────────────────────
-function renderMetrics(data){
-  const cuota = data.reduce((s,d)=>s+d.cuota,0);
-  const av = data.reduce((s,d)=>s+d.avance,0);
-  const gp = cuota>0 ? av/cuota : 0;
-  const above50 = data.filter(d=>d.avance_pct>=0.5).length;
+function renderMetrics(rows) {
+  const cuota = rows.reduce((s,d) => s + d.cuota, 0);
+  const av    = rows.reduce((s,d) => s + d.avance, 0);
+  const gp    = cuota > 0 ? av / cuota : 0;
+
+  // Count unique POS (by pos name) with avance_pct >= 50%
+  const above50 = rows.filter(r => r.pct >= 0.5).length;
   const {c} = pctColor(gp);
+
   document.getElementById('metrics').innerHTML = `
-    <div class="metric"><div class="metric-label">Avance global</div><div class="metric-val" style="color:${c}">${(gp*100).toFixed(1)}%</div></div>
-    <div class="metric"><div class="metric-label">Total avance</div><div class="metric-val blue">${av.toLocaleString()}</div></div>
-    <div class="metric"><div class="metric-label">Cuota total</div><div class="metric-val amber">${Math.round(cuota).toLocaleString()}</div></div>
-    <div class="metric"><div class="metric-label">#POS con Registro de Venta ≥ 50%</div><div class="metric-val green">${above50} / ${data.length}</div></div>
+    <div class="metric">
+      <div class="metric-label">Avance global</div>
+      <div class="metric-val" style="color:${c}">${(gp*100).toFixed(1)}%</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Total avance</div>
+      <div class="metric-val blue">${Math.round(av).toLocaleString()}</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Cuota total</div>
+      <div class="metric-val amber">${Math.round(cuota).toLocaleString()}</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">#POS con Registro ≥ 50%</div>
+      <div class="metric-val green">${above50} / ${rows.length}</div>
+    </div>
   `;
 }
 
-// ── BAR SECTIONS ──────────────────────────────────────────────────────────────
-function renderBars(data, cat, containerId, label, badgeClass){
-  const rows = (cat==='ALL' ? data : data.filter(d=>d.CATEGORIA===cat));
-  if(!rows.length){ document.getElementById(containerId).innerHTML=''; return; }
+// ── BARS ──────────────────────────────────────────────────────────────────────
+function renderBars(rawData, cat, containerId, label, badgeClass) {
+  const rows = cat === 'ALL' ? rawData : rawData.filter(d => d.CATEGORIA.toUpperCase() === cat.toUpperCase());
+  if (!rows.length) { document.getElementById(containerId).innerHTML = ''; return; }
+
   const byP = {};
-  rows.forEach(d=>{
-    if(!byP[d.PROMOTOR]) byP[d.PROMOTOR]={cuota:0,av:0,chains:[]};
-    byP[d.PROMOTOR].cuota += d.cuota;
-    byP[d.PROMOTOR].av += d.avance;
+  rows.forEach(d => {
+    if (!byP[d.PROMOTOR]) byP[d.PROMOTOR] = {cuota:0, av:0, chains:[]};
+    byP[d.PROMOTOR].cuota  += d.cuota;
+    byP[d.PROMOTOR].av     += d.avance;
     byP[d.PROMOTOR].chains.push(d.CADENA);
   });
-  const sorted = Object.entries(byP).map(([p,v])=>({
-    p, pct: v.cuota>0?v.av/v.cuota:0, chains:[...new Set(v.chains)], av:v.av, cuota:v.cuota
-  })).sort((a,b)=>b.pct-a.pct);
-  const maxP = Math.min(Math.max(...sorted.map(r=>r.pct))*1.05, 3.5);
+
+  const sorted = Object.entries(byP).map(([p,v]) => ({
+    p, pct: v.cuota > 0 ? v.av / v.cuota : 0,
+    chains: [...new Set(v.chains)], av: v.av, cuota: v.cuota
+  })).sort((a,b) => b.pct - a.pct);
+
+  const maxP = Math.min(Math.max(...sorted.map(r => r.pct)) * 1.05, 3.5);
 
   let html = `<div class="section">
     <div class="section-header">
@@ -677,12 +640,13 @@ function renderBars(data, cat, containerId, label, badgeClass){
     </div>
     <div class="bars-wrap">`;
 
-  sorted.forEach(r=>{
-    const w = Math.min((r.pct/maxP)*100,100);
-    const {c,bg} = pctColor(r.pct);
-    const chains = r.chains.map(ch=>chainTag(ch)).join('');
+  sorted.forEach(r => {
+    const w = Math.min((r.pct / maxP) * 100, 100);
+    const {c, bg} = pctColor(r.pct);
+    const chains = r.chains.map(ch => chainTag(ch)).join('');
+    const name = r.p.split(' ').slice(0,2).join(' ');
     html += `<div class="bar-row">
-      <div class="bar-name" title="${r.p}">${r.p.split(' ')[0]} ${r.p.split(' ')[1]||''}</div>
+      <div class="bar-name" title="${r.p}">${name}</div>
       <div class="bar-track">
         <div class="bar-fill" style="width:${w}%;background:${bg};border:1px solid ${c}40">
           <span class="bar-pct" style="color:${c}">${(r.pct*100).toFixed(1)}%</span>
@@ -696,32 +660,36 @@ function renderBars(data, cat, containerId, label, badgeClass){
 }
 
 // ── ALERTS ────────────────────────────────────────────────────────────────────
-function renderAlerts(){
-  const f = getFilters();
-  const data = LOW_RAW.filter(d=>(f.cadena==='ALL'||d.c===f.cadena)&&(f.cat==='ALL'||d.cat===f.cat)).sort((a,b)=>a.pct-b.pct);
+function renderAlerts(posRows) {
+  const data = posRows.filter(r => r.pct < 0.5).sort((a,b) => a.pct - b.pct);
   document.getElementById('alertBadge').textContent = data.length + ' POS';
-  if(!data.length){ document.getElementById('alertGrid').innerHTML='<p style="color:var(--text3);font-size:13px;padding:1rem 0">No hay POS críticos con los filtros seleccionados.</p>'; return; }
-  document.getElementById('alertGrid').innerHTML = data.map(d=>{
+
+  if (!data.length) {
+    document.getElementById('alertGrid').innerHTML = '<p style="color:var(--text3);font-size:13px;padding:1rem 0">No hay POS críticos con los filtros seleccionados.</p>';
+    return;
+  }
+
+  document.getElementById('alertGrid').innerHTML = data.map(d => {
     const isCrit = d.pct < 0.25;
-    const {bg:chainBg, c:chainC} = CC[d.c]||{c:'#888',bg:'#eee'};
-    const catBg = d.cat==='VELO'?'var(--blue-bg)':'var(--green-bg)';
-    const catC = d.cat==='VELO'?'var(--blue)':'var(--green)';
-    return `<div class="alert-card ${isCrit?'':'warn'}">
-      <div class="alert-pos">${d.pos}</div>
+    const {bg: chainBg, c: chainC} = CC[d.cadena] || {c:'#888', bg:'#eee'};
+    const catBg = d.categoria.toUpperCase().includes('VELO') ? 'var(--blue-bg)' : 'var(--green-bg)';
+    const catC  = d.categoria.toUpperCase().includes('VELO') ? 'var(--blue)'    : 'var(--green)';
+    return `<div class="alert-card ${isCrit ? '' : 'warn'}">
+      <div class="alert-pos">${d.pos || d.cadena + ' — ' + d.categoria}</div>
       <div class="alert-tags">
-        <span class="prom-tag">${d.p}</span>
-        <span class="chain-tag" style="color:${chainC};background:${chainBg}">${d.c}</span>
-        <span class="chain-tag" style="color:${catC};background:${catBg}">${d.cat}</span>
-        <span class="pct-tag ${isCrit?'pct-crit':'pct-warn'}">${(d.pct*100).toFixed(1)}%</span>
+        <span class="prom-tag">${d.promotor}</span>
+        <span class="chain-tag" style="color:${chainC};background:${chainBg}">${d.cadena}</span>
+        <span class="chain-tag" style="color:${catC};background:${catBg}">${d.categoria}</span>
+        <span class="pct-tag ${isCrit ? 'pct-crit' : 'pct-warn'}">${(d.pct*100).toFixed(1)}%</span>
       </div>
     </div>`;
   }).join('');
 }
 
 // ── PROMO BUTTONS ─────────────────────────────────────────────────────────────
-function renderPromoBtns(){
-  const promos = [...new Set(POS_DATA.map(d=>d.p))].sort();
-  document.getElementById('promoBtns').innerHTML = promos.map(p=>
+function renderPromoBtns() {
+  const promos = [...new Set(ALL_ROWS.map(d => d.promotor))].sort();
+  document.getElementById('promoBtns').innerHTML = promos.map(p =>
     `<button class="promo-btn" onclick="openModal('${p.replace(/'/g,"\\'")}',this)">${p}</button>`
   ).join('');
 }
@@ -729,97 +697,103 @@ function renderPromoBtns(){
 // ── MODAL ─────────────────────────────────────────────────────────────────────
 let _modalP = null, _modalCat = 'ALL';
 
-function openModal(p, btn){
-  document.querySelectorAll('.promo-btn').forEach(b=>b.classList.remove('active'));
+function openModal(p, btn) {
+  document.querySelectorAll('.promo-btn').forEach(b => b.classList.remove('active'));
   btn && btn.classList.add('active');
   _modalP = p; _modalCat = 'ALL';
-  document.querySelectorAll('.cat-btn').forEach((b,i)=>{ b.classList.remove('active'); if(i===0)b.classList.add('active'); });
+  document.querySelectorAll('.cat-btn').forEach((b,i) => { b.classList.remove('active'); if(i===0) b.classList.add('active'); });
   document.getElementById('modalSort').value = 'pct_asc';
 
-  const rows = POS_DATA.filter(d=>d.p===p);
-  const totC = rows.reduce((s,d)=>s+d.cuota,0);
-  const totA = rows.reduce((s,d)=>s+d.av,0);
-  const gp = totC>0?totA/totC:0;
-  const above50 = rows.filter(d=>d.pct>=0.5).length;
+  const rows = ALL_ROWS.filter(d => d.promotor === p);
+  const totC = rows.reduce((s,d) => s + d.cuota, 0);
+  const totA = rows.reduce((s,d) => s + d.avance, 0);
+  const gp   = totC > 0 ? totA / totC : 0;
+  const above50 = rows.filter(d => d.pct >= 0.5).length;
   const {c} = pctColor(gp);
 
   document.getElementById('modalTitle').textContent = p;
-  document.getElementById('modalSub').textContent = 'Performance de POS TT AUDIT — Marzo 2026';
+  document.getElementById('modalSub').textContent = 'Performance por POS — Marzo 2026';
   document.getElementById('modalMetrics').innerHTML = `
     <div class="modal-metric"><div class="lbl">Avance global</div><div class="val" style="color:${c}">${(gp*100).toFixed(1)}%</div></div>
-    <div class="modal-metric"><div class="lbl">Avance / Cuota</div><div class="val" style="font-size:14px;color:var(--text)">${totA.toLocaleString()} / ${Math.round(totC).toLocaleString()}</div></div>
-    <div class="modal-metric"><div class="lbl">#POS con Registro ≥ 50%</div><div class="val green" style="color:var(--green)">${above50} / ${rows.length}</div></div>
+    <div class="modal-metric"><div class="lbl">Avance / Cuota</div><div class="val" style="font-size:14px;color:var(--text)">${Math.round(totA).toLocaleString()} / ${Math.round(totC).toLocaleString()}</div></div>
+    <div class="modal-metric"><div class="lbl">#POS con Registro ≥ 50%</div><div class="val" style="color:var(--green)">${above50} / ${rows.length}</div></div>
   `;
   renderModalTable();
   document.getElementById('modalOverlay').classList.add('open');
 }
 
-function renderModalTable(){
-  if(!_modalP) return;
-  let rows = POS_DATA.filter(d=>d.p===_modalP);
-  if(_modalCat!=='ALL') rows = rows.filter(d=>d.cat===_modalCat);
-  const sort = document.getElementById('modalSort').value;
-  if(sort==='pct_asc') rows.sort((a,b)=>a.pct-b.pct);
-  else if(sort==='pct_desc') rows.sort((a,b)=>b.pct-a.pct);
-  else rows.sort((a,b)=>a.pos.localeCompare(b.pos));
+function renderModalTable() {
+  if (!_modalP) return;
+  let rows = ALL_ROWS.filter(d => d.promotor === _modalP);
+  if (_modalCat !== 'ALL') rows = rows.filter(d => d.categoria.toUpperCase() === _modalCat.toUpperCase());
 
-  if(!rows.length){
-    document.getElementById('modalTbody').innerHTML='<tr class="empty-row"><td colspan="6">Sin datos para la categoría seleccionada.</td></tr>';
+  const sort = document.getElementById('modalSort').value;
+  if (sort === 'pct_asc')  rows.sort((a,b) => a.pct - b.pct);
+  else if (sort === 'pct_desc') rows.sort((a,b) => b.pct - a.pct);
+  else rows.sort((a,b) => (a.pos||'').localeCompare(b.pos||''));
+
+  if (!rows.length) {
+    document.getElementById('modalTbody').innerHTML = '<tr class="empty-row"><td colspan="6">Sin datos para la categoría seleccionada.</td></tr>';
     return;
   }
-  document.getElementById('modalTbody').innerHTML = rows.map(d=>`
+  document.getElementById('modalTbody').innerHTML = rows.map(d => `
     <tr>
-      <td>${d.pos}</td>
-      <td>${chainTag(d.c)}</td>
-      <td>${catTag(d.cat)}</td>
+      <td>${d.pos || '—'}</td>
+      <td>${chainTag(d.cadena)}</td>
+      <td>${catTag(d.categoria)}</td>
       <td class="num">${Math.round(d.cuota).toLocaleString()}</td>
-      <td class="num">${d.av.toLocaleString()}</td>
+      <td class="num">${Math.round(d.avance).toLocaleString()}</td>
       <td>${pill(d.pct)}</td>
     </tr>
   `).join('');
 }
 
-function setModalCat(cat, el){
+function setModalCat(cat, el) {
   _modalCat = cat;
-  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
   el.classList.add('active');
   renderModalTable();
 }
 
-function closeModal(){
+function closeModal() {
   document.getElementById('modalOverlay').classList.remove('open');
-  document.querySelectorAll('.promo-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.promo-btn').forEach(b => b.classList.remove('active'));
 }
 
-function handleOverlayClick(e){
-  if(e.target===document.getElementById('modalOverlay')) closeModal();
+function handleOverlayClick(e) {
+  if (e.target === document.getElementById('modalOverlay')) closeModal();
 }
 
 // ── TABS ──────────────────────────────────────────────────────────────────────
-function switchTab(tab, el){
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+function switchTab(tab, el) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
-  document.getElementById('barsTab').style.display   = tab==='bars'  ? 'block':'none';
-  document.getElementById('alertsTab').style.display = tab==='alerts'? 'block':'none';
-  document.getElementById('promoTab').style.display  = tab==='promo' ? 'block':'none';
+  document.getElementById('barsTab').style.display   = tab === 'bars'   ? 'block' : 'none';
+  document.getElementById('alertsTab').style.display = tab === 'alerts' ? 'block' : 'none';
+  document.getElementById('promoTab').style.display  = tab === 'promo'  ? 'block' : 'none';
 }
 
 // ── MAIN RENDER ───────────────────────────────────────────────────────────────
-function render(){
-  const data = filterRaw();
+function render() {
+  const filtered = filterRows();
+  const raw = getRAW(filtered);
   const f = getFilters();
-  renderMetrics(data);
-  const sv = f.cat==='ALL'||f.cat==='VELO';
-  const sc = f.cat==='ALL'||f.cat==='LS CAPS';
-  if(sv) renderBars(data,'VELO','veloSection','Velo','badge-velo');
-  else document.getElementById('veloSection').innerHTML='';
-  if(sc) renderBars(data,'LS CAPS','capsSection','LS Caps','badge-caps');
-  else document.getElementById('capsSection').innerHTML='';
-  renderAlerts();
+
+  renderMetrics(filtered);
+
+  const sv = f.cat === 'ALL' || f.cat.toUpperCase() === 'VELO';
+  const sc = f.cat === 'ALL' || f.cat.toUpperCase().includes('CAPS');
+  if (sv) renderBars(raw, 'Velo',    'veloSection', 'Velo',    'badge-velo');
+  else    document.getElementById('veloSection').innerHTML = '';
+  if (sc) renderBars(raw, 'LS Caps', 'capsSection', 'LS Caps', 'badge-caps');
+  else    document.getElementById('capsSection').innerHTML = '';
+
+  renderAlerts(filtered);
+  renderPromoBtns();
 }
 
-renderPromoBtns();
-render();
+// ── INIT ──────────────────────────────────────────────────────────────────────
+loadData();
 </script>
 </body>
 </html>
