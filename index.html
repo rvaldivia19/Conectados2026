@@ -7,292 +7,181 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #f5f4f0;
-  --surface: #ffffff;
-  --surface2: #f0efe9;
-  --border: rgba(0,0,0,0.08);
-  --border2: rgba(0,0,0,0.14);
-  --text: #1a1916;
-  --text2: #6b6a65;
-  --text3: #9e9d98;
-  --green: #1a7a52;
-  --green-bg: #e6f4ed;
-  --red: #c0392b;
-  --red-bg: #fdecea;
-  --amber: #925c00;
-  --amber-bg: #fef3e0;
-  --blue: #1a5a8a;
-  --blue-bg: #e8f1fa;
-  --tambo-c: #1a5a8a;
-  --tambo-bg: #e8f1fa;
-  --oxxo-c: #1a6644;
-  --oxxo-bg: #e4f2eb;
-  --primax-c: #854f0b;
-  --primax-bg: #faeeda;
-  --ava-c: #4a3ab0;
-  --ava-bg: #eeedfe;
-  --radius: 10px;
-  --radius-lg: 14px;
+  --bg: #f5f4f0; --surface: #ffffff; --surface2: #f0efe9;
+  --border: rgba(0,0,0,0.08); --border2: rgba(0,0,0,0.14);
+  --text: #1a1916; --text2: #6b6a65; --text3: #9e9d98;
+  --green: #1a7a52; --green-bg: #e6f4ed;
+  --red: #c0392b;   --red-bg: #fdecea;
+  --amber: #925c00; --amber-bg: #fef3e0;
+  --blue: #1a5a8a;  --blue-bg: #e8f1fa;
+  --tambo-c: #1a5a8a; --tambo-bg: #e8f1fa;
+  --oxxo-c: #1a6644;  --oxxo-bg: #e4f2eb;
+  --primax-c: #854f0b;--primax-bg: #faeeda;
+  --ava-c: #4a3ab0;   --ava-bg: #eeedfe;
+  --radius: 10px; --radius-lg: 14px;
   --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 2px 8px rgba(0,0,0,0.04);
   --shadow-md: 0 4px 16px rgba(0,0,0,0.10), 0 1px 4px rgba(0,0,0,0.06);
 }
-
 * { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); font-size: 14px; min-height: 100vh; }
 
-body {
-  font-family: 'DM Sans', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  font-size: 14px;
-  min-height: 100vh;
-}
+#loadingScreen { position:fixed; inset:0; background:var(--bg); display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:9999; gap:16px; }
+.spinner { width:36px; height:36px; border:3px solid var(--border2); border-top-color:var(--blue); border-radius:50%; animation:spin .7s linear infinite; }
+@keyframes spin { to { transform:rotate(360deg); } }
+.loading-txt { font-size:13px; color:var(--text3); font-weight:500; }
+#errorBanner { display:none; background:var(--red-bg); border:1px solid var(--red); border-radius:var(--radius); padding:14px 18px; color:var(--red); font-size:13px; margin-bottom:1rem; }
 
-/* Loading */
-#loadingScreen {
-  position: fixed; inset: 0;
-  background: var(--bg);
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  z-index: 9999; gap: 16px;
-}
-.spinner {
-  width: 36px; height: 36px;
-  border: 3px solid var(--border2);
-  border-top-color: var(--blue);
-  border-radius: 50%;
-  animation: spin .7s linear infinite;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-.loading-txt { font-size: 13px; color: var(--text3); font-weight: 500; }
+.page { max-width:1140px; margin:0 auto; padding:2rem 1.5rem 4rem; }
 
-#errorBanner {
-  display: none;
-  background: var(--red-bg); border: 1px solid var(--red);
-  border-radius: var(--radius); padding: 14px 18px;
-  color: var(--red); font-size: 13px; margin-bottom: 1rem;
-}
+.header { display:flex; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; gap:16px; margin-bottom:1.75rem; }
+.header-eyebrow { font-size:11px; font-weight:500; letter-spacing:0.08em; text-transform:uppercase; color:var(--text3); margin-bottom:6px; }
+.header-title { font-size:24px; font-weight:600; color:var(--text); line-height:1.2; }
+.header-sub { font-size:13px; color:var(--text2); margin-top:4px; }
+.header-right { display:flex; flex-direction:column; align-items:flex-end; gap:8px; }
+.refresh-btn { font-family:'DM Sans',sans-serif; font-size:12px; font-weight:500; padding:6px 14px; border-radius:8px; border:1px solid var(--border2); background:var(--surface); color:var(--text2); cursor:pointer; box-shadow:var(--shadow); transition:all .15s; display:flex; align-items:center; gap:6px; }
+.refresh-btn:hover { background:var(--surface2); color:var(--text); }
+.refresh-btn:disabled { opacity:.5; cursor:not-allowed; }
+.last-update { font-size:11px; color:var(--text3); }
+.filters { display:flex; gap:8px; align-items:center; flex-wrap:wrap; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:8px 12px; box-shadow:var(--shadow); }
+.filters label { font-size:12px; color:var(--text3); font-weight:500; }
+select { font-family:'DM Sans',sans-serif; font-size:13px; padding:5px 10px; border-radius:8px; border:1px solid var(--border2); background:var(--surface2); color:var(--text); cursor:pointer; outline:none; transition:border-color .15s; }
+select:focus { border-color:var(--blue); }
 
-/* Layout */
-.page { max-width: 1140px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
-
-/* Header */
-.header {
-  display: flex; align-items: flex-start; justify-content: space-between;
-  flex-wrap: wrap; gap: 16px; margin-bottom: 1.75rem;
-}
-.header-eyebrow {
-  font-size: 11px; font-weight: 500; letter-spacing: 0.08em;
-  text-transform: uppercase; color: var(--text3); margin-bottom: 6px;
-}
-.header-title { font-size: 24px; font-weight: 600; color: var(--text); line-height: 1.2; }
-.header-sub { font-size: 13px; color: var(--text2); margin-top: 4px; }
-.header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
-
-.refresh-btn {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 12px; font-weight: 500;
-  padding: 6px 14px; border-radius: 8px;
-  border: 1px solid var(--border2);
-  background: var(--surface); color: var(--text2);
-  cursor: pointer; box-shadow: var(--shadow);
-  transition: all .15s; display: flex; align-items: center; gap: 6px;
-}
-.refresh-btn:hover { background: var(--surface2); color: var(--text); }
-.refresh-btn:disabled { opacity: .5; cursor: not-allowed; }
-.last-update { font-size: 11px; color: var(--text3); }
-
-.filters {
-  display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 8px 12px;
-  box-shadow: var(--shadow);
-}
-.filters label { font-size: 12px; color: var(--text3); font-weight: 500; }
-select {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 13px; padding: 5px 10px;
-  border-radius: 8px; border: 1px solid var(--border2);
-  background: var(--surface2); color: var(--text);
-  cursor: pointer; outline: none; transition: border-color .15s;
-}
-select:focus { border-color: var(--blue); }
+/* Progress Hero */
+.progress-hero { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); padding:20px 24px; margin-bottom:1.25rem; box-shadow:var(--shadow); }
+.progress-hero-top { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:10px; flex-wrap:wrap; gap:8px; }
+.progress-hero-label { font-size:12px; font-weight:600; color:var(--text3); text-transform:uppercase; letter-spacing:.06em; margin-bottom:4px; }
+.progress-hero-nums { display:flex; align-items:baseline; gap:6px; }
+.progress-hero-pct { font-size:32px; font-weight:600; font-family:'DM Mono',monospace; }
+.progress-hero-sub { font-size:13px; color:var(--text3); }
+.progress-track { height:14px; background:var(--surface2); border-radius:20px; overflow:hidden; border:1px solid var(--border); }
+.progress-fill { height:100%; border-radius:20px; transition:width .8s cubic-bezier(.4,0,.2,1); }
+.progress-meta { display:flex; justify-content:space-between; margin-top:8px; font-size:11px; color:var(--text3); flex-wrap:wrap; gap:4px; }
+.days-pill { display:inline-flex; align-items:center; gap:5px; background:var(--amber-bg); color:var(--amber); border-radius:20px; padding:4px 12px; font-size:12px; font-weight:600; }
 
 /* Metrics */
-.metrics {
-  display: grid; grid-template-columns: repeat(4, minmax(0,1fr));
-  gap: 10px; margin-bottom: 1.5rem;
-}
-.metric {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius-lg); padding: 16px 18px;
-  box-shadow: var(--shadow); transition: box-shadow .2s;
-}
-.metric:hover { box-shadow: var(--shadow-md); }
-.metric-label {
-  font-size: 11px; font-weight: 500; color: var(--text3);
-  text-transform: uppercase; letter-spacing: 0.06em;
-  line-height: 1.4; margin-bottom: 8px;
-}
-.metric-val { font-size: 26px; font-weight: 600; font-family: 'DM Mono', monospace; }
-.metric-val.green { color: var(--green); }
-.metric-val.red { color: var(--red); }
-.metric-val.blue { color: var(--blue); }
-.metric-val.amber { color: var(--amber); }
+.metrics { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; margin-bottom:1.25rem; }
+.metric { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); padding:16px 18px; box-shadow:var(--shadow); transition:box-shadow .2s; }
+.metric:hover { box-shadow:var(--shadow-md); }
+.metric-label { font-size:11px; font-weight:500; color:var(--text3); text-transform:uppercase; letter-spacing:0.06em; line-height:1.4; margin-bottom:8px; }
+.metric-val { font-size:26px; font-weight:600; font-family:'DM Mono',monospace; }
+.metric-val.green { color:var(--green); } .metric-val.blue { color:var(--blue); } .metric-val.amber { color:var(--amber); }
+.metric-sub { font-size:11px; color:var(--text3); margin-top:4px; }
+
+/* Podium */
+.podium-section { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:1.25rem; }
+.podium-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); padding:14px 16px; box-shadow:var(--shadow); }
+.podium-title { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.06em; margin-bottom:10px; }
+.podium-title.top { color:var(--green); } .podium-title.bot { color:var(--red); }
+.podium-row { display:flex; align-items:center; gap:10px; padding:6px 0; border-bottom:1px solid var(--border); }
+.podium-row:last-child { border-bottom:none; }
+.podium-rank { font-size:14px; width:22px; flex-shrink:0; }
+.podium-name { font-size:12px; font-weight:500; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.podium-pct { font-size:12px; font-weight:600; font-family:'DM Mono',monospace; flex-shrink:0; }
+
+/* Cadena summary */
+.cadena-summary { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; margin-bottom:1.5rem; }
+.cadena-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); padding:14px 16px; box-shadow:var(--shadow); }
+.cadena-name { font-size:12px; font-weight:600; margin-bottom:6px; }
+.cadena-pct { font-size:22px; font-weight:600; font-family:'DM Mono',monospace; margin-bottom:8px; }
+.cadena-track { height:6px; background:var(--surface2); border-radius:10px; overflow:hidden; }
+.cadena-fill { height:100%; border-radius:10px; transition:width .6s; }
+.cadena-meta { font-size:10px; color:var(--text3); margin-top:6px; }
 
 /* Tabs */
-.tabs { display: flex; gap: 4px; margin-bottom: 1.25rem; flex-wrap: wrap; }
-.tab {
-  padding: 8px 20px; border-radius: 8px;
-  border: 1px solid var(--border2); background: var(--surface);
-  color: var(--text2); cursor: pointer; font-size: 13px; font-weight: 500;
-  font-family: 'DM Sans', sans-serif;
-  transition: all .15s; box-shadow: var(--shadow);
-}
-.tab:hover { background: var(--surface2); color: var(--text); }
-.tab.active { background: var(--text); color: #fff; border-color: var(--text); box-shadow: var(--shadow-md); }
+.tabs { display:flex; gap:4px; margin-bottom:1.25rem; flex-wrap:wrap; }
+.tab { padding:8px 20px; border-radius:8px; border:1px solid var(--border2); background:var(--surface); color:var(--text2); cursor:pointer; font-size:13px; font-weight:500; font-family:'DM Sans',sans-serif; transition:all .15s; box-shadow:var(--shadow); }
+.tab:hover { background:var(--surface2); color:var(--text); }
+.tab.active { background:var(--text); color:#fff; border-color:var(--text); box-shadow:var(--shadow-md); }
 
-/* Bar chart */
-.section { margin-bottom: 2rem; }
-.section-header { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
-.section-title { font-size: 13px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.06em; }
-.badge { font-size: 11px; padding: 2px 9px; border-radius: 20px; font-weight: 500; }
-.badge-velo { background: var(--blue-bg); color: var(--blue); }
-.badge-caps { background: var(--green-bg); color: var(--green); }
-
-.bars-wrap { display: flex; flex-direction: column; gap: 5px; }
-.bar-row { display: flex; align-items: center; gap: 10px; }
-.bar-name {
-  font-size: 12px; color: var(--text2); width: 138px; flex-shrink: 0;
-  text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500;
-}
-.bar-track {
-  flex: 1; height: 24px; background: var(--surface2);
-  border-radius: 6px; overflow: hidden; min-width: 80px; border: 1px solid var(--border);
-}
-.bar-fill {
-  height: 100%; border-radius: 6px;
-  display: flex; align-items: center; justify-content: flex-end;
-  padding-right: 8px; transition: width .6s cubic-bezier(.4,0,.2,1);
-}
-.bar-pct { font-size: 11px; font-weight: 600; font-family: 'DM Mono', monospace; }
-.bar-chains { display: flex; gap: 4px; flex-shrink: 0; }
-.chain-tag { font-size: 10px; padding: 2px 7px; border-radius: 10px; font-weight: 500; }
+/* Bars */
+.section { margin-bottom:2rem; }
+.section-header { display:flex; align-items:center; gap:8px; margin-bottom:14px; }
+.section-title { font-size:13px; font-weight:600; color:var(--text2); text-transform:uppercase; letter-spacing:0.06em; }
+.badge { font-size:11px; padding:2px 9px; border-radius:20px; font-weight:500; }
+.badge-velo { background:var(--blue-bg); color:var(--blue); }
+.badge-caps { background:var(--green-bg); color:var(--green); }
+.bars-wrap { display:flex; flex-direction:column; gap:5px; }
+.bar-row { display:flex; align-items:center; gap:10px; }
+.bar-name { font-size:12px; color:var(--text2); width:138px; flex-shrink:0; text-align:right; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:500; }
+.bar-track { flex:1; height:24px; background:var(--surface2); border-radius:6px; overflow:hidden; min-width:80px; border:1px solid var(--border); }
+.bar-fill { height:100%; border-radius:6px; display:flex; align-items:center; justify-content:flex-end; padding-right:8px; transition:width .6s cubic-bezier(.4,0,.2,1); }
+.bar-pct { font-size:11px; font-weight:600; font-family:'DM Mono',monospace; }
+.bar-chains { display:flex; gap:4px; flex-shrink:0; }
+.chain-tag { font-size:10px; padding:2px 7px; border-radius:10px; font-weight:500; }
 
 /* Alerts */
-.alert-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
-  gap: 10px; max-height: 520px; overflow-y: auto; padding-right: 2px;
-}
-.alert-grid::-webkit-scrollbar { width: 4px; }
-.alert-grid::-webkit-scrollbar-track { background: var(--surface2); border-radius: 4px; }
-.alert-grid::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
-.alert-card {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius-lg); padding: 12px 14px;
-  border-left: 3px solid var(--red);
-  box-shadow: var(--shadow); transition: box-shadow .15s;
-}
-.alert-card:hover { box-shadow: var(--shadow-md); }
-.alert-card.warn { border-left-color: #d97706; }
-.alert-pos { font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 6px; line-height: 1.3; }
-.alert-tags { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
-.prom-tag { font-size: 11px; padding: 2px 8px; border-radius: 20px; background: var(--surface2); color: var(--text2); font-weight: 500; }
-.pct-tag { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 20px; font-family: 'DM Mono', monospace; }
-.pct-crit { background: var(--red-bg); color: var(--red); }
-.pct-warn { background: var(--amber-bg); color: var(--amber); }
+.alert-search { width:100%; font-family:'DM Sans',sans-serif; font-size:13px; padding:8px 14px; border-radius:var(--radius); border:1px solid var(--border2); background:var(--surface); color:var(--text); outline:none; box-shadow:var(--shadow); margin-bottom:12px; transition:border-color .15s; }
+.alert-search:focus { border-color:var(--blue); }
+.alert-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(270px,1fr)); gap:10px; max-height:520px; overflow-y:auto; padding-right:2px; }
+.alert-grid::-webkit-scrollbar { width:4px; }
+.alert-grid::-webkit-scrollbar-thumb { background:var(--border2); border-radius:4px; }
+.alert-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); padding:12px 14px; border-left:3px solid var(--red); box-shadow:var(--shadow); transition:box-shadow .15s; }
+.alert-card:hover { box-shadow:var(--shadow-md); }
+.alert-card.warn { border-left-color:#d97706; }
+.alert-pos { font-size:12px; font-weight:600; color:var(--text); margin-bottom:6px; line-height:1.3; }
+.alert-tags { display:flex; gap:6px; flex-wrap:wrap; align-items:center; }
+.prom-tag { font-size:11px; padding:2px 8px; border-radius:20px; background:var(--surface2); color:var(--text2); font-weight:500; }
+.pct-tag { font-size:11px; font-weight:600; padding:2px 8px; border-radius:20px; font-family:'DM Mono',monospace; }
+.pct-crit { background:var(--red-bg); color:var(--red); }
+.pct-warn { background:var(--amber-bg); color:var(--amber); }
 
-/* Promotor view */
-.promo-btn-section { margin-bottom: 1.5rem; }
-.promo-btn-label { font-size: 12px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 10px; }
-.promo-btns { display: flex; flex-wrap: wrap; gap: 8px; }
-.promo-btn {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 12px; font-weight: 500; padding: 6px 14px;
-  border-radius: 20px; border: 1px solid var(--border2);
-  background: var(--surface); color: var(--text2);
-  cursor: pointer; transition: all .15s; box-shadow: var(--shadow);
-}
-.promo-btn:hover { background: var(--surface2); color: var(--text); }
-.promo-btn.active { background: var(--text); color: #fff; border-color: var(--text); }
+/* Promo */
+.promo-btn-section { margin-bottom:1.5rem; }
+.promo-btn-label { font-size:12px; font-weight:600; color:var(--text3); text-transform:uppercase; letter-spacing:.06em; margin-bottom:10px; }
+.promo-btns { display:flex; flex-wrap:wrap; gap:8px; }
+.promo-btn { font-family:'DM Sans',sans-serif; font-size:12px; font-weight:500; padding:6px 14px; border-radius:20px; border:1px solid var(--border2); background:var(--surface); color:var(--text2); cursor:pointer; transition:all .15s; box-shadow:var(--shadow); }
+.promo-btn:hover { background:var(--surface2); color:var(--text); }
+.promo-btn.active { background:var(--text); color:#fff; border-color:var(--text); }
 
 /* Modal */
-.modal-overlay {
-  display: none; position: fixed; inset: 0;
-  background: rgba(26,25,22,0.45); z-index: 999;
-  align-items: flex-start; justify-content: center;
-  padding: 3rem 1rem; overflow-y: auto;
-}
-.modal-overlay.open { display: flex; }
-.modal {
-  background: var(--surface); border-radius: var(--radius-lg);
-  border: 1px solid var(--border); width: 100%; max-width: 740px;
-  padding: 1.75rem; box-shadow: 0 20px 60px rgba(0,0,0,0.18);
-  animation: slideUp .2s ease;
-}
-@keyframes slideUp { from { transform: translateY(12px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-.modal-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem; }
-.modal-title { font-size: 18px; font-weight: 600; color: var(--text); }
-.modal-sub { font-size: 12px; color: var(--text3); margin-top: 3px; }
-.modal-close {
-  font-family: 'DM Sans', sans-serif;
-  background: var(--surface2); border: 1px solid var(--border2);
-  border-radius: 8px; padding: 5px 12px; cursor: pointer;
-  font-size: 12px; color: var(--text2); font-weight: 500; transition: all .15s;
-}
-.modal-close:hover { background: var(--surface); color: var(--text); }
-.modal-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1.25rem; }
-.modal-metric { background: var(--surface2); border-radius: var(--radius); padding: 12px 14px; border: 1px solid var(--border); }
-.modal-metric .lbl { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--text3); margin-bottom: 5px; }
-.modal-metric .val { font-size: 20px; font-weight: 600; font-family: 'DM Mono', monospace; }
-.modal-controls { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; align-items: center; }
-.cat-btns { display: flex; gap: 4px; }
-.cat-btn {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 12px; padding: 4px 12px; border-radius: 20px;
-  border: 1px solid var(--border2); background: var(--surface2);
-  color: var(--text2); cursor: pointer; font-weight: 500; transition: all .15s;
-}
-.cat-btn.active { background: var(--text); color: #fff; border-color: var(--text); }
-.modal-sort { margin-left: auto; }
-.table-wrap { max-height: 360px; overflow-y: auto; border: 1px solid var(--border); border-radius: var(--radius); }
-.table-wrap::-webkit-scrollbar { width: 4px; }
-.table-wrap::-webkit-scrollbar-track { background: var(--surface2); }
-.table-wrap::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
-table { width: 100%; border-collapse: collapse; font-size: 12px; }
-thead th {
-  position: sticky; top: 0; background: var(--surface2);
-  padding: 9px 12px; text-align: left;
-  font-size: 11px; font-weight: 600; color: var(--text3);
-  text-transform: uppercase; letter-spacing: .05em;
-  border-bottom: 1px solid var(--border2);
-}
-tbody td { padding: 8px 12px; border-bottom: 1px solid var(--border); color: var(--text); }
-tbody tr:last-child td { border-bottom: none; }
-tbody tr:hover td { background: var(--surface2); }
-.num { text-align: right; font-family: 'DM Mono', monospace; font-size: 12px; }
-.pct-pill {
-  display: inline-block; padding: 2px 9px; border-radius: 20px;
-  font-size: 11px; font-weight: 600; font-family: 'DM Mono', monospace; white-space: nowrap;
-}
-.empty-row td { text-align: center; color: var(--text3); padding: 2rem; }
+.modal-overlay { display:none; position:fixed; inset:0; background:rgba(26,25,22,0.45); z-index:999; align-items:flex-start; justify-content:center; padding:3rem 1rem; overflow-y:auto; }
+.modal-overlay.open { display:flex; }
+.modal { background:var(--surface); border-radius:var(--radius-lg); border:1px solid var(--border); width:100%; max-width:780px; padding:1.75rem; box-shadow:0 20px 60px rgba(0,0,0,0.18); animation:slideUp .2s ease; }
+@keyframes slideUp { from{transform:translateY(12px);opacity:0}to{transform:translateY(0);opacity:1} }
+.modal-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1.25rem; }
+.modal-title { font-size:18px; font-weight:600; color:var(--text); }
+.modal-sub { font-size:12px; color:var(--text3); margin-top:3px; }
+.modal-close { font-family:'DM Sans',sans-serif; background:var(--surface2); border:1px solid var(--border2); border-radius:8px; padding:5px 12px; cursor:pointer; font-size:12px; color:var(--text2); font-weight:500; }
+.modal-close:hover { background:var(--surface); color:var(--text); }
+.modal-metrics { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:1.25rem; }
+.modal-metric { background:var(--surface2); border-radius:var(--radius); padding:12px 14px; border:1px solid var(--border); }
+.modal-metric .lbl { font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:.06em; color:var(--text3); margin-bottom:5px; }
+.modal-metric .val { font-size:20px; font-weight:600; font-family:'DM Mono',monospace; }
+.modal-controls { display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap; align-items:center; }
+.cat-btns { display:flex; gap:4px; }
+.cat-btn { font-family:'DM Sans',sans-serif; font-size:12px; padding:4px 12px; border-radius:20px; border:1px solid var(--border2); background:var(--surface2); color:var(--text2); cursor:pointer; font-weight:500; transition:all .15s; }
+.cat-btn.active { background:var(--text); color:#fff; border-color:var(--text); }
+.modal-sort { margin-left:auto; }
+.table-wrap { max-height:360px; overflow-y:auto; border:1px solid var(--border); border-radius:var(--radius); }
+.table-wrap::-webkit-scrollbar { width:4px; }
+.table-wrap::-webkit-scrollbar-thumb { background:var(--border2); border-radius:4px; }
+table { width:100%; border-collapse:collapse; font-size:12px; }
+thead th { position:sticky; top:0; background:var(--surface2); padding:9px 12px; text-align:left; font-size:11px; font-weight:600; color:var(--text3); text-transform:uppercase; letter-spacing:.05em; border-bottom:1px solid var(--border2); cursor:pointer; user-select:none; white-space:nowrap; }
+thead th:hover { color:var(--text2); }
+tbody td { padding:8px 12px; border-bottom:1px solid var(--border); color:var(--text); }
+tbody tr:last-child td { border-bottom:none; }
+tbody tr:hover td { background:var(--surface2); }
+.num { text-align:right; font-family:'DM Mono',monospace; font-size:12px; }
+.pct-pill { display:inline-block; padding:2px 9px; border-radius:20px; font-size:11px; font-weight:600; font-family:'DM Mono',monospace; white-space:nowrap; }
+.empty-row td { text-align:center; color:var(--text3); padding:2rem; }
 
-@media (max-width: 680px) {
-  .metrics { grid-template-columns: repeat(2, 1fr); }
-  .modal-metrics { grid-template-columns: repeat(2, 1fr); }
-  .header { flex-direction: column; }
+@media(max-width:680px) {
+  .metrics,.cadena-summary { grid-template-columns:repeat(2,1fr); }
+  .podium-section { grid-template-columns:1fr; }
+  .modal-metrics { grid-template-columns:repeat(2,1fr); }
+  .header { flex-direction:column; }
 }
 </style>
 </head>
 <body>
 
-<!-- Loading -->
 <div id="loadingScreen">
   <div class="spinner"></div>
   <div class="loading-txt">Cargando datos desde Google Sheets…</div>
 </div>
 
 <div class="page" id="mainContent" style="display:none">
-
   <div id="errorBanner"></div>
 
   <!-- HEADER -->
@@ -321,15 +210,22 @@ tbody tr:hover td { background: var(--surface2); }
       </div>
       <div style="display:flex;align-items:center;gap:12px">
         <span class="last-update" id="lastUpdate"></span>
-        <button class="refresh-btn" onclick="loadData()" id="refreshBtn">
-          <span>↺</span> Actualizar datos
-        </button>
+        <button class="refresh-btn" onclick="loadData()" id="refreshBtn">↺ Actualizar datos</button>
       </div>
     </div>
   </div>
 
+  <!-- PROGRESS HERO -->
+  <div class="progress-hero" id="progressHero"></div>
+
   <!-- METRICS -->
   <div class="metrics" id="metrics"></div>
+
+  <!-- TOP/BOTTOM 3 -->
+  <div class="podium-section" id="podiumSection"></div>
+
+  <!-- CADENA SUMMARY -->
+  <div class="cadena-summary" id="cadenaSummary"></div>
 
   <!-- TABS -->
   <div class="tabs">
@@ -338,41 +234,35 @@ tbody tr:hover td { background: var(--surface2); }
     <button class="tab" onclick="switchTab('promo',this)">Ver por promotor</button>
   </div>
 
-  <!-- TAB: BARS -->
   <div id="barsTab">
     <div id="veloSection"></div>
     <div id="capsSection"></div>
   </div>
 
-  <!-- TAB: ALERTS -->
   <div id="alertsTab" style="display:none">
     <div class="section">
       <div class="section-header">
         <span class="section-title">POS con avance menor al 50%</span>
         <span id="alertBadge" class="badge" style="background:var(--red-bg);color:var(--red)"></span>
       </div>
+      <input class="alert-search" id="alertSearch" placeholder="🔍  Buscar por nombre de POS, promotor o cadena…" oninput="renderAlerts(filterRows())">
       <div class="alert-grid" id="alertGrid"></div>
     </div>
   </div>
 
-  <!-- TAB: PROMOTOR -->
   <div id="promoTab" style="display:none">
     <div class="promo-btn-section">
       <div class="promo-btn-label">Selecciona un promotor</div>
       <div class="promo-btns" id="promoBtns"></div>
     </div>
   </div>
-
 </div>
 
 <!-- MODAL -->
 <div class="modal-overlay" id="modalOverlay" onclick="handleOverlayClick(event)">
-  <div class="modal" id="modalBox">
+  <div class="modal">
     <div class="modal-top">
-      <div>
-        <div class="modal-title" id="modalTitle"></div>
-        <div class="modal-sub" id="modalSub"></div>
-      </div>
+      <div><div class="modal-title" id="modalTitle"></div><div class="modal-sub" id="modalSub"></div></div>
       <button class="modal-close" onclick="closeModal()">Cerrar ✕</button>
     </div>
     <div class="modal-metrics" id="modalMetrics"></div>
@@ -382,26 +272,17 @@ tbody tr:hover td { background: var(--surface2); }
         <button class="cat-btn" onclick="setModalCat('Velo',this)">Velo</button>
         <button class="cat-btn" onclick="setModalCat('LS Caps',this)">LS Caps</button>
       </div>
-      <div class="modal-sort">
-        <select id="modalSort" onchange="renderModalTable()" style="font-size:12px;padding:4px 10px">
-          <option value="pct_asc">% Avance ↑</option>
-          <option value="pct_desc">% Avance ↓</option>
-          <option value="pos">POS A–Z</option>
-        </select>
-      </div>
     </div>
     <div class="table-wrap">
       <table>
-        <thead>
-          <tr>
-            <th>POS TT AUDIT</th>
-            <th>Cadena</th>
-            <th>Categoría</th>
-            <th class="num">Cuota</th>
-            <th class="num">Avance</th>
-            <th>Avance %</th>
-          </tr>
-        </thead>
+        <thead><tr>
+          <th onclick="sortModal('pos')">POS TT AUDIT ↕</th>
+          <th>Cadena</th><th>Categoría</th>
+          <th class="num" onclick="sortModal('cuota')">Cuota ↕</th>
+          <th class="num" onclick="sortModal('avance')">Avance ↕</th>
+          <th class="num" onclick="sortModal('falta')">Falta ↕</th>
+          <th onclick="sortModal('pct')">Avance % ↕</th>
+        </tr></thead>
         <tbody id="modalTbody"></tbody>
       </table>
     </div>
@@ -409,390 +290,213 @@ tbody tr:hover td { background: var(--surface2); }
 </div>
 
 <script>
-// ── CONFIG ────────────────────────────────────────────────────────────────────
-const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7P-NJiClfQREuK_ih64aP9ImgNsOJA6N5DEamVDdon3QI0WaK9qgID5_7EG6zhu6-21nc-Qzlhyz3/pub?gid=0&single=true&output=csv';
-// Extracting sheet ID from the published URL for JSON API fallback
-const SHEET_ID_PUBLISHED = '2PACX-1vQ7P-NJiClfQREuK_ih64aP9ImgNsOJA6N5DEamVDdon3QI0WaK9qgID5_7EG6zhu6-21nc-Qzlhyz3';
+const SHEET_CSV_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7P-NJiClfQREuK_ih64aP9ImgNsOJA6N5DEamVDdon3QI0WaK9qgID5_7EG6zhu6-21nc-Qzlhyz3/pub?gid=0&single=true&output=csv';
+let ALL_ROWS=[];
 
-// ── STATE ─────────────────────────────────────────────────────────────────────
-let ALL_ROWS = []; // raw POS-level rows from sheet
+function getDaysLeft(){const n=new Date();return new Date(n.getFullYear(),n.getMonth()+1,0).getDate()-n.getDate();}
 
-// ── CSV PARSER ────────────────────────────────────────────────────────────────
-function parseCSV(text) {
-  const lines = text.trim().split('\n');
-  if (lines.length < 2) return [];
-  const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
-  return lines.slice(1).map(line => {
-    // Handle quoted fields with commas inside
-    const vals = [];
-    let cur = '', inQ = false;
-    for (let i = 0; i < line.length; i++) {
-      const ch = line[i];
-      if (ch === '"') { inQ = !inQ; }
-      else if (ch === ',' && !inQ) { vals.push(cur.trim()); cur = ''; }
-      else { cur += ch; }
-    }
+function parseCSV(text){
+  const lines=text.trim().split('\n');
+  if(lines.length<2)return[];
+  const headers=lines[0].split(',').map(h=>h.trim().replace(/^"|"$/g,''));
+  return lines.slice(1).map(line=>{
+    const vals=[];let cur='',inQ=false;
+    for(let i=0;i<line.length;i++){const ch=line[i];if(ch==='"'){inQ=!inQ;}else if(ch===','&&!inQ){vals.push(cur.trim());cur='';}else{cur+=ch;}}
     vals.push(cur.trim());
-    const obj = {};
-    headers.forEach((h, i) => { obj[h] = (vals[i] || '').replace(/^"|"$/g, '').trim(); });
+    const obj={};headers.forEach((h,i)=>{obj[h]=(vals[i]||'').replace(/^"|"$/g,'').trim();});
     return obj;
-  }).filter(r => r[headers[0]]); // skip empty rows
+  }).filter(r=>r[headers[0]]);
 }
 
-// ── LOAD DATA ─────────────────────────────────────────────────────────────────
-async function loadData() {
-  const btn = document.getElementById('refreshBtn');
-  btn.disabled = true;
-  btn.innerHTML = '<span class="spinner" style="width:14px;height:14px;border-width:2px;display:inline-block"></span> Cargando…';
-
-  try {
-    // Try multiple CORS proxies in order
-    const proxies = [
-      'https://api.allorigins.win/raw?url=' + encodeURIComponent(SHEET_CSV_URL),
-      'https://corsproxy.io/?' + encodeURIComponent(SHEET_CSV_URL),
-      'https://cors-anywhere.herokuapp.com/' + SHEET_CSV_URL,
-    ];
-
-    let text = null;
-    let lastErr = null;
-    for (const url of proxies) {
-      try {
-        const resp = await fetch(url, {signal: AbortSignal.timeout(8000)});
-        if (resp.ok) { text = await resp.text(); break; }
-      } catch(e) { lastErr = e; }
-    }
-    if (!text) throw new Error('No se pudo conectar con Google Sheets. Intenta de nuevo en unos segundos.');
-    const rows = parseCSV(text);
-
-    if (!rows.length) throw new Error('El Sheet está vacío o sin datos');
-
-    // Detect columns (flexible mapping)
-    const sample = rows[0];
-    const keys = Object.keys(sample);
-
-    // Find column names dynamically
-    const findCol = (...candidates) => candidates.find(c => keys.find(k => k.toUpperCase() === c.toUpperCase()));
-    const colCadena    = findCol('CADENA');
-    const colPos       = findCol('POS TT AUDIT', 'POS', 'POS_TT_AUDIT');
-    const colPromotor  = findCol('PROMOTOR');
-    const colCat       = findCol('CATEGORIA', 'CATEGORÍA');
-    const colCuota     = findCol('CUOTA');
-    const colAvance    = findCol('AVANCE AL 22', 'AVANCE', 'AVANCE AL22');
-    const colPct       = findCol('AVANCE %', 'AVANCE%', 'AVANCE_PCT');
-
-    if (!colCadena || !colPromotor || !colCat || !colCuota || !colAvance) {
-      throw new Error(`Columnas no encontradas. Encontradas: ${keys.join(', ')}`);
-    }
-
-    ALL_ROWS = rows.map(r => {
-      const cuota = parseFloat((r[colCuota] || '0').replace('%','').replace(',','.')) || 0;
-      const avance = parseFloat((r[colAvance] || '0').replace('%','').replace(',','.')) || 0;
-      // pct: if column has % sign or value > 1 assume it's 0-100 scale
-      let pctRaw = parseFloat((r[colPct] || '0').replace('%','').replace(',','.')) || 0;
-      // If pct > 1.5, assume it's stored as 0-100 (e.g. "25" means 25%)
-      const pct = pctRaw > 1.5 ? pctRaw / 100 : pctRaw;
-
-      return {
-        cadena:    (r[colCadena] || '').toUpperCase().trim(),
-        pos:       r[colPos] || '',
-        promotor:  (r[colPromotor] || '').toUpperCase().trim(),
-        categoria: (r[colCat] || '').trim(),
-        cuota,
-        avance,
-        pct: cuota > 0 ? avance / cuota : pct
-      };
-    }).filter(r => r.cadena && r.promotor);
-
-    document.getElementById('lastUpdate').textContent = 'Actualizado ' + new Date().toLocaleTimeString('es-PE', {hour:'2-digit',minute:'2-digit'});
-    document.getElementById('errorBanner').style.display = 'none';
+async function loadData(){
+  const btn=document.getElementById('refreshBtn');
+  btn.disabled=true;btn.textContent='⏳ Cargando…';
+  try{
+    const proxies=['https://api.allorigins.win/raw?url='+encodeURIComponent(SHEET_CSV_URL),'https://corsproxy.io/?'+encodeURIComponent(SHEET_CSV_URL)];
+    let text=null;
+    for(const url of proxies){try{const r=await fetch(url,{signal:AbortSignal.timeout(8000)});if(r.ok){text=await r.text();break;}}catch(e){}}
+    if(!text)throw new Error('No se pudo conectar con Google Sheets.');
+    const rows=parseCSV(text);
+    if(!rows.length)throw new Error('El Sheet está vacío.');
+    const keys=Object.keys(rows[0]);
+    const fc=(...cs)=>cs.find(c=>keys.find(k=>k.toUpperCase()===c.toUpperCase()));
+    const cC=fc('CADENA'),cP=fc('POS TT AUDIT','POS'),cPr=fc('PROMOTOR'),cCat=fc('CATEGORIA','CATEGORÍA'),cCu=fc('CUOTA'),cAv=fc('AVANCE AL 22','AVANCE'),cPct=fc('AVANCE %','AVANCE%');
+    if(!cC||!cPr||!cCat||!cCu||!cAv)throw new Error('Columnas no encontradas: '+keys.join(', '));
+    ALL_ROWS=rows.map(r=>{
+      const cuota=parseFloat((r[cCu]||'0').replace('%','').replace(',','.'))||0;
+      const avance=parseFloat((r[cAv]||'0').replace('%','').replace(',','.'))||0;
+      let pRaw=parseFloat((r[cPct]||'0').replace('%','').replace(',','.'))||0;
+      return{cadena:(r[cC]||'').toUpperCase().trim(),pos:r[cP]||'',promotor:(r[cPr]||'').toUpperCase().trim(),categoria:(r[cCat]||'').trim(),cuota,avance,pct:cuota>0?avance/cuota:(pRaw>1.5?pRaw/100:pRaw)};
+    }).filter(r=>r.cadena&&r.promotor);
+    document.getElementById('lastUpdate').textContent='Actualizado '+new Date().toLocaleTimeString('es-PE',{hour:'2-digit',minute:'2-digit'});
+    document.getElementById('errorBanner').style.display='none';
     render();
-
-  } catch (err) {
-    const banner = document.getElementById('errorBanner');
-    banner.style.display = 'block';
-    banner.textContent = '⚠️ Error al cargar datos: ' + err.message + '. Verifica que el Sheet esté publicado correctamente.';
-    console.error(err);
-  } finally {
-    btn.disabled = false;
-    btn.innerHTML = '<span>↺</span> Actualizar datos';
-    document.getElementById('loadingScreen').style.display = 'none';
-    document.getElementById('mainContent').style.display = 'block';
+  }catch(err){
+    const b=document.getElementById('errorBanner');b.style.display='block';b.textContent='⚠️ '+err.message;
+  }finally{
+    btn.disabled=false;btn.textContent='↺ Actualizar datos';
+    document.getElementById('loadingScreen').style.display='none';
+    document.getElementById('mainContent').style.display='block';
   }
 }
 
-// ── HELPERS ───────────────────────────────────────────────────────────────────
-const CC = {
-  TAMBO:  {c:'var(--tambo-c)',  bg:'var(--tambo-bg)'},
-  OXXO:   {c:'var(--oxxo-c)',   bg:'var(--oxxo-bg)'},
-  PRIMAX: {c:'var(--primax-c)', bg:'var(--primax-bg)'},
-  AVA:    {c:'var(--ava-c)',    bg:'var(--ava-bg)'},
-  PECSA:  {c:'var(--primax-c)', bg:'var(--primax-bg)'},
-};
+const CC={TAMBO:{c:'var(--tambo-c)',bg:'var(--tambo-bg)'},OXXO:{c:'var(--oxxo-c)',bg:'var(--oxxo-bg)'},PRIMAX:{c:'var(--primax-c)',bg:'var(--primax-bg)'},AVA:{c:'var(--ava-c)',bg:'var(--ava-bg)'},PECSA:{c:'var(--primax-c)',bg:'var(--primax-bg)'}};
+function pctColor(p){if(p>=1)return{c:'var(--green)',bg:'var(--green-bg)'};if(p>=.75)return{c:'#2d7a3a',bg:'#e8f5eb'};if(p>=.5)return{c:'var(--amber)',bg:'var(--amber-bg)'};return{c:'var(--red)',bg:'var(--red-bg)'};}
+function pill(p){const{c,bg}=pctColor(p);return`<span class="pct-pill" style="color:${c};background:${bg}">${Math.floor(p*100)}%</span>`;}
+function chainTag(c){const s=CC[c]||{c:'#888',bg:'#eee'};return`<span class="chain-tag" style="color:${s.c};background:${s.bg}">${c}</span>`;}
+function catTag(cat){const v=cat.toUpperCase().includes('VELO');return v?`<span class="chain-tag" style="color:var(--blue);background:var(--blue-bg)">Velo</span>`:`<span class="chain-tag" style="color:var(--green);background:var(--green-bg)">LS Caps</span>`;}
+function getFilters(){return{cadena:document.getElementById('cadenaFilter').value,cat:document.getElementById('catFilter').value};}
+function filterRows(){const f=getFilters();return ALL_ROWS.filter(r=>(f.cadena==='ALL'||r.cadena===f.cadena)&&(f.cat==='ALL'||r.categoria.toUpperCase()===f.cat.toUpperCase()));}
+function getRAW(rows){const m={};rows.forEach(r=>{const k=`${r.promotor}||${r.categoria}||${r.cadena}`;if(!m[k])m[k]={PROMOTOR:r.promotor,CATEGORIA:r.categoria,CADENA:r.cadena,cuota:0,avance:0};m[k].cuota+=r.cuota;m[k].avance+=r.avance;});return Object.values(m).map(d=>({...d,avance_pct:d.cuota>0?d.avance/d.cuota:0}));}
 
-function pctColor(p) {
-  if (p >= 1)    return {c:'var(--green)',  bg:'var(--green-bg)'};
-  if (p >= 0.75) return {c:'#2d7a3a',      bg:'#e8f5eb'};
-  if (p >= 0.5)  return {c:'var(--amber)',  bg:'var(--amber-bg)'};
-  return             {c:'var(--red)',    bg:'var(--red-bg)'};
-}
-
-function pill(p) {
-  const {c,bg} = pctColor(p);
-  return `<span class="pct-pill" style="color:${c};background:${bg}">${(p*100).toFixed(1)}%</span>`;
-}
-
-function chainTag(c) {
-  const s = CC[c] || {c:'#888', bg:'#eee'};
-  return `<span class="chain-tag" style="color:${s.c};background:${s.bg}">${c}</span>`;
-}
-
-function catTag(cat) {
-  const isVelo = cat.toUpperCase().includes('VELO');
-  return isVelo
-    ? `<span class="chain-tag" style="color:var(--blue);background:var(--blue-bg)">Velo</span>`
-    : `<span class="chain-tag" style="color:var(--green);background:var(--green-bg)">LS Caps</span>`;
-}
-
-function getFilters() {
-  return {
-    cadena: document.getElementById('cadenaFilter').value,
-    cat:    document.getElementById('catFilter').value
-  };
-}
-
-function filterRows() {
-  const f = getFilters();
-  return ALL_ROWS.filter(r =>
-    (f.cadena === 'ALL' || r.cadena === f.cadena) &&
-    (f.cat === 'ALL' || r.categoria.toUpperCase() === f.cat.toUpperCase())
-  );
-}
-
-// ── AGGREGATE: RAW (promotor+categoria+cadena) ────────────────────────────────
-function getRAW(rows) {
-  const map = {};
-  rows.forEach(r => {
-    const key = `${r.promotor}||${r.categoria}||${r.cadena}`;
-    if (!map[key]) map[key] = {PROMOTOR: r.promotor, CATEGORIA: r.categoria, CADENA: r.cadena, cuota: 0, avance: 0};
-    map[key].cuota  += r.cuota;
-    map[key].avance += r.avance;
-  });
-  return Object.values(map).map(d => ({
-    ...d,
-    avance_pct: d.cuota > 0 ? d.avance / d.cuota : 0
-  }));
-}
-
-// ── METRICS ───────────────────────────────────────────────────────────────────
-function renderMetrics(rows) {
-  const cuota = rows.reduce((s,d) => s + d.cuota, 0);
-  const av    = rows.reduce((s,d) => s + d.avance, 0);
-  const gp    = cuota > 0 ? av / cuota : 0;
-
-  // Count unique POS (by pos name) with avance_pct >= 50%
-  const above50 = rows.filter(r => r.pct >= 0.5).length;
-  const {c} = pctColor(gp);
-
-  document.getElementById('metrics').innerHTML = `
-    <div class="metric">
-      <div class="metric-label">Avance global</div>
-      <div class="metric-val" style="color:${c}">${(gp*100).toFixed(1)}%</div>
-    </div>
-    <div class="metric">
-      <div class="metric-label">Total avance</div>
-      <div class="metric-val blue">${Math.round(av).toLocaleString()}</div>
-    </div>
-    <div class="metric">
-      <div class="metric-label">Cuota total</div>
-      <div class="metric-val amber">${Math.round(cuota).toLocaleString()}</div>
-    </div>
-    <div class="metric">
-      <div class="metric-label">#POS con Registro ≥ 50%</div>
-      <div class="metric-val green">${above50} / ${rows.length}</div>
-    </div>
-  `;
-}
-
-// ── BARS ──────────────────────────────────────────────────────────────────────
-function renderBars(rawData, cat, containerId, label, badgeClass) {
-  const rows = cat === 'ALL' ? rawData : rawData.filter(d => d.CATEGORIA.toUpperCase() === cat.toUpperCase());
-  if (!rows.length) { document.getElementById(containerId).innerHTML = ''; return; }
-
-  const byP = {};
-  rows.forEach(d => {
-    if (!byP[d.PROMOTOR]) byP[d.PROMOTOR] = {cuota:0, av:0, chains:[]};
-    byP[d.PROMOTOR].cuota  += d.cuota;
-    byP[d.PROMOTOR].av     += d.avance;
-    byP[d.PROMOTOR].chains.push(d.CADENA);
-  });
-
-  const sorted = Object.entries(byP).map(([p,v]) => ({
-    p, pct: v.cuota > 0 ? v.av / v.cuota : 0,
-    chains: [...new Set(v.chains)], av: v.av, cuota: v.cuota
-  })).sort((a,b) => b.pct - a.pct);
-
-  const maxP = Math.min(Math.max(...sorted.map(r => r.pct)) * 1.05, 3.5);
-
-  let html = `<div class="section">
-    <div class="section-header">
-      <span class="section-title">${label}</span>
-      <span class="badge ${badgeClass}">${sorted.length} promotores</span>
-    </div>
-    <div class="bars-wrap">`;
-
-  sorted.forEach(r => {
-    const w = Math.min((r.pct / maxP) * 100, 100);
-    const {c, bg} = pctColor(r.pct);
-    const chains = r.chains.map(ch => chainTag(ch)).join('');
-    const name = r.p.split(' ').slice(0,2).join(' ');
-    html += `<div class="bar-row">
-      <div class="bar-name" title="${r.p}">${name}</div>
-      <div class="bar-track">
-        <div class="bar-fill" style="width:${w}%;background:${bg};border:1px solid ${c}40">
-          <span class="bar-pct" style="color:${c}">${(r.pct*100).toFixed(1)}%</span>
-        </div>
+function renderProgressHero(rows){
+  const cuota=rows.reduce((s,d)=>s+d.cuota,0),av=rows.reduce((s,d)=>s+d.avance,0);
+  const gp=cuota>0?av/cuota:0,falta=Math.max(0,cuota-av);
+  const{c}=pctColor(gp);
+  document.getElementById('progressHero').innerHTML=`
+    <div class="progress-hero-top">
+      <div><div class="progress-hero-label">Progreso general hacia la meta de marzo</div>
+        <div class="progress-hero-nums"><span class="progress-hero-pct" style="color:${c}">${Math.floor(gp*100)}%</span><span class="progress-hero-sub">de la cuota total</span></div>
       </div>
-      <div class="bar-chains">${chains}</div>
+      <span class="days-pill">⏱ ${getDaysLeft()} días restantes en marzo</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" style="width:${Math.min(gp*100,100)}%;background:${c}"></div></div>
+    <div class="progress-meta">
+      <span>${Math.round(av).toLocaleString()} unidades vendidas</span>
+      <span>Falta: ${Math.round(falta).toLocaleString()} unidades para la meta</span>
+      <span>Meta total: ${Math.round(cuota).toLocaleString()}</span>
     </div>`;
-  });
-  html += `</div></div>`;
-  document.getElementById(containerId).innerHTML = html;
 }
 
-// ── ALERTS ────────────────────────────────────────────────────────────────────
-function renderAlerts(posRows) {
-  const data = posRows.filter(r => r.pct < 0.5).sort((a,b) => a.pct - b.pct);
-  document.getElementById('alertBadge').textContent = data.length + ' POS';
+function renderMetrics(rows){
+  const cuota=rows.reduce((s,d)=>s+d.cuota,0),av=rows.reduce((s,d)=>s+d.avance,0);
+  const gp=cuota>0?av/cuota:0,above50=rows.filter(r=>r.pct>=0.5).length;
+  const falta=Math.max(0,Math.round(cuota-av));const{c}=pctColor(gp);
+  document.getElementById('metrics').innerHTML=`
+    <div class="metric"><div class="metric-label">Avance global</div><div class="metric-val" style="color:${c}">${Math.floor(gp*100)}%</div></div>
+    <div class="metric"><div class="metric-label">Total avance</div><div class="metric-val blue">${Math.round(av).toLocaleString()}</div></div>
+    <div class="metric"><div class="metric-label">Cuota total</div><div class="metric-val amber">${Math.round(cuota).toLocaleString()}</div><div class="metric-sub">Falta: ${falta.toLocaleString()} uds.</div></div>
+    <div class="metric"><div class="metric-label">#POS con Registro ≥ 50%</div><div class="metric-val green">${above50} / ${rows.length}</div></div>`;
+}
 
-  if (!data.length) {
-    document.getElementById('alertGrid').innerHTML = '<p style="color:var(--text3);font-size:13px;padding:1rem 0">No hay POS críticos con los filtros seleccionados.</p>';
-    return;
-  }
+function renderPodium(rows){
+  const byP={};rows.forEach(r=>{if(!byP[r.promotor])byP[r.promotor]={cuota:0,av:0};byP[r.promotor].cuota+=r.cuota;byP[r.promotor].av+=r.avance;});
+  const sorted=Object.entries(byP).map(([p,v])=>({p,pct:v.cuota>0?v.av/v.cuota:0})).sort((a,b)=>b.pct-a.pct);
+  const top3=sorted.slice(0,3),bot3=[...sorted].sort((a,b)=>a.pct-b.pct).slice(0,3);
+  const medals=['🥇','🥈','🥉'];
+  const rh=(r,i)=>{const{c}=pctColor(r.pct);const n=r.p.split(' ').slice(0,2).join(' ');return`<div class="podium-row"><span class="podium-rank">${medals[i]}</span><span class="podium-name" title="${r.p}">${n}</span><span class="podium-pct" style="color:${c}">${Math.floor(r.pct*100)}%</span></div>`;};
+  document.getElementById('podiumSection').innerHTML=`
+    <div class="podium-card"><div class="podium-title top">🏆 Top 3 promotores</div>${top3.map(rh).join('')}</div>
+    <div class="podium-card"><div class="podium-title bot">⚠️ Necesitan apoyo</div>${bot3.map(rh).join('')}</div>`;
+}
 
-  document.getElementById('alertGrid').innerHTML = data.map(d => {
-    const isCrit = d.pct < 0.25;
-    const {bg: chainBg, c: chainC} = CC[d.cadena] || {c:'#888', bg:'#eee'};
-    const catBg = d.categoria.toUpperCase().includes('VELO') ? 'var(--blue-bg)' : 'var(--green-bg)';
-    const catC  = d.categoria.toUpperCase().includes('VELO') ? 'var(--blue)'    : 'var(--green)';
-    return `<div class="alert-card ${isCrit ? '' : 'warn'}">
-      <div class="alert-pos">${d.pos || d.cadena + ' — ' + d.categoria}</div>
-      <div class="alert-tags">
-        <span class="prom-tag">${d.promotor}</span>
-        <span class="chain-tag" style="color:${chainC};background:${chainBg}">${d.cadena}</span>
-        <span class="chain-tag" style="color:${catC};background:${catBg}">${d.categoria}</span>
-        <span class="pct-tag ${isCrit ? 'pct-crit' : 'pct-warn'}">${(d.pct*100).toFixed(1)}%</span>
-      </div>
+function renderCadenaSummary(rows){
+  document.getElementById('cadenaSummary').innerHTML=['TAMBO','OXXO','PRIMAX','AVA'].map(c=>{
+    const cr=rows.filter(r=>r.cadena===c);if(!cr.length)return'';
+    const cuota=cr.reduce((s,r)=>s+r.cuota,0),av=cr.reduce((s,r)=>s+r.avance,0);
+    const pct=cuota>0?av/cuota:0;const{c:col}=pctColor(pct);const s=CC[c]||{c:'#888'};
+    return`<div class="cadena-card" style="border-top:3px solid ${s.c}">
+      <div class="cadena-name" style="color:${s.c}">${c}</div>
+      <div class="cadena-pct" style="color:${col}">${Math.floor(pct*100)}%</div>
+      <div class="cadena-track"><div class="cadena-fill" style="width:${Math.min(pct*100,100)}%;background:${col}"></div></div>
+      <div class="cadena-meta">${Math.round(av).toLocaleString()} / ${Math.round(cuota).toLocaleString()} uds · ${cr.length} POS</div>
     </div>`;
   }).join('');
 }
 
-// ── PROMO BUTTONS ─────────────────────────────────────────────────────────────
-function renderPromoBtns() {
-  const promos = [...new Set(ALL_ROWS.map(d => d.promotor))].sort();
-  document.getElementById('promoBtns').innerHTML = promos.map(p =>
-    `<button class="promo-btn" onclick="openModal('${p.replace(/'/g,"\\'")}',this)">${p}</button>`
-  ).join('');
+function renderBars(rawData,cat,cId,label,bClass){
+  const rows=cat==='ALL'?rawData:rawData.filter(d=>d.CATEGORIA.toUpperCase()===cat.toUpperCase());
+  if(!rows.length){document.getElementById(cId).innerHTML='';return;}
+  const byP={};rows.forEach(d=>{if(!byP[d.PROMOTOR])byP[d.PROMOTOR]={cuota:0,av:0,chains:[]};byP[d.PROMOTOR].cuota+=d.cuota;byP[d.PROMOTOR].av+=d.avance;byP[d.PROMOTOR].chains.push(d.CADENA);});
+  const sorted=Object.entries(byP).map(([p,v])=>({p,pct:v.cuota>0?v.av/v.cuota:0,chains:[...new Set(v.chains)],av:v.av,cuota:v.cuota})).sort((a,b)=>b.pct-a.pct);
+  const maxP=Math.min(Math.max(...sorted.map(r=>r.pct))*1.05,3.5);
+  let html=`<div class="section"><div class="section-header"><span class="section-title">${label}</span><span class="badge ${bClass}">${sorted.length} promotores</span></div><div class="bars-wrap">`;
+  sorted.forEach(r=>{const w=Math.min((r.pct/maxP)*100,100);const{c,bg}=pctColor(r.pct);html+=`<div class="bar-row"><div class="bar-name" title="${r.p}">${r.p.split(' ').slice(0,2).join(' ')}</div><div class="bar-track"><div class="bar-fill" style="width:${w}%;background:${bg};border:1px solid ${c}40"><span class="bar-pct" style="color:${c}">${Math.floor(r.pct*100)}%</span></div></div><div class="bar-chains">${r.chains.map(ch=>chainTag(ch)).join('')}</div></div>`;});
+  html+=`</div></div>`;document.getElementById(cId).innerHTML=html;
 }
 
-// ── MODAL ─────────────────────────────────────────────────────────────────────
-let _modalP = null, _modalCat = 'ALL';
+function renderAlerts(posRows){
+  const q=(document.getElementById('alertSearch')?.value||'').toLowerCase();
+  let data=posRows.filter(r=>r.pct<0.5);
+  if(q)data=data.filter(r=>(r.pos+r.promotor+r.cadena).toLowerCase().includes(q));
+  data.sort((a,b)=>a.pct-b.pct);
+  document.getElementById('alertBadge').textContent=data.length+' POS';
+  if(!data.length){document.getElementById('alertGrid').innerHTML='<p style="color:var(--text3);font-size:13px;padding:1rem 0">No hay POS críticos con los filtros seleccionados.</p>';return;}
+  document.getElementById('alertGrid').innerHTML=data.map(d=>{
+    const isCrit=d.pct<0.25;const{bg:cBg,c:cC}=CC[d.cadena]||{c:'#888',bg:'#eee'};
+    const catBg=d.categoria.toUpperCase().includes('VELO')?'var(--blue-bg)':'var(--green-bg)';
+    const catC=d.categoria.toUpperCase().includes('VELO')?'var(--blue)':'var(--green)';
+    return`<div class="alert-card ${isCrit?'':'warn'}"><div class="alert-pos">${d.pos||d.cadena+' — '+d.categoria}</div><div class="alert-tags"><span class="prom-tag">${d.promotor}</span><span class="chain-tag" style="color:${cC};background:${cBg}">${d.cadena}</span><span class="chain-tag" style="color:${catC};background:${catBg}">${d.categoria}</span><span class="pct-tag ${isCrit?'pct-crit':'pct-warn'}">${Math.floor(d.pct*100)}%</span></div></div>`;
+  }).join('');
+}
 
-function openModal(p, btn) {
-  document.querySelectorAll('.promo-btn').forEach(b => b.classList.remove('active'));
-  btn && btn.classList.add('active');
-  _modalP = p; _modalCat = 'ALL';
-  document.querySelectorAll('.cat-btn').forEach((b,i) => { b.classList.remove('active'); if(i===0) b.classList.add('active'); });
-  document.getElementById('modalSort').value = 'pct_asc';
+function renderPromoBtns(){
+  document.getElementById('promoBtns').innerHTML=[...new Set(ALL_ROWS.map(d=>d.promotor))].sort().map(p=>`<button class="promo-btn" onclick="openModal('${p.replace(/'/g,"\\'")}',this)">${p}</button>`).join('');
+}
 
-  const rows = ALL_ROWS.filter(d => d.promotor === p);
-  const totC = rows.reduce((s,d) => s + d.cuota, 0);
-  const totA = rows.reduce((s,d) => s + d.avance, 0);
-  const gp   = totC > 0 ? totA / totC : 0;
-  const above50 = rows.filter(d => d.pct >= 0.5).length;
-  const {c} = pctColor(gp);
-
-  document.getElementById('modalTitle').textContent = p;
-  document.getElementById('modalSub').textContent = 'Performance por POS — Marzo 2026';
-  document.getElementById('modalMetrics').innerHTML = `
-    <div class="modal-metric"><div class="lbl">Avance global</div><div class="val" style="color:${c}">${(gp*100).toFixed(1)}%</div></div>
-    <div class="modal-metric"><div class="lbl">Avance / Cuota</div><div class="val" style="font-size:14px;color:var(--text)">${Math.round(totA).toLocaleString()} / ${Math.round(totC).toLocaleString()}</div></div>
-    <div class="modal-metric"><div class="lbl">#POS con Registro ≥ 50%</div><div class="val" style="color:var(--green)">${above50} / ${rows.length}</div></div>
-  `;
+let _mP=null,_mCat='ALL',_mSortCol='pct',_mSortDir=1;
+function openModal(p,btn){
+  document.querySelectorAll('.promo-btn').forEach(b=>b.classList.remove('active'));btn&&btn.classList.add('active');
+  _mP=p;_mCat='ALL';_mSortCol='pct';_mSortDir=1;
+  document.querySelectorAll('.cat-btn').forEach((b,i)=>{b.classList.remove('active');if(i===0)b.classList.add('active');});
+  const rows=ALL_ROWS.filter(d=>d.promotor===p);
+  const totC=rows.reduce((s,d)=>s+d.cuota,0),totA=rows.reduce((s,d)=>s+d.avance,0);
+  const gp=totC>0?totA/totC:0,above50=rows.filter(d=>d.pct>=0.5).length;
+  const{c}=pctColor(gp);
+  document.getElementById('modalTitle').textContent=p;
+  document.getElementById('modalSub').textContent='Performance por POS — Marzo 2026';
+  document.getElementById('modalMetrics').innerHTML=`
+    <div class="modal-metric"><div class="lbl">Avance global</div><div class="val" style="color:${c}">${Math.floor(gp*100)}%</div></div>
+    <div class="modal-metric"><div class="lbl">Avance / Cuota</div><div class="val" style="font-size:14px">${Math.round(totA).toLocaleString()} / ${Math.round(totC).toLocaleString()}</div></div>
+    <div class="modal-metric"><div class="lbl">#POS ≥ 50%</div><div class="val" style="color:var(--green)">${above50} / ${rows.length}</div></div>`;
   renderModalTable();
   document.getElementById('modalOverlay').classList.add('open');
 }
 
-function renderModalTable() {
-  if (!_modalP) return;
-  let rows = ALL_ROWS.filter(d => d.promotor === _modalP);
-  if (_modalCat !== 'ALL') rows = rows.filter(d => d.categoria.toUpperCase() === _modalCat.toUpperCase());
+function sortModal(col){if(_mSortCol===col)_mSortDir*=-1;else{_mSortCol=col;_mSortDir=1;}renderModalTable();}
 
-  const sort = document.getElementById('modalSort').value;
-  if (sort === 'pct_asc')  rows.sort((a,b) => a.pct - b.pct);
-  else if (sort === 'pct_desc') rows.sort((a,b) => b.pct - a.pct);
-  else rows.sort((a,b) => (a.pos||'').localeCompare(b.pos||''));
-
-  if (!rows.length) {
-    document.getElementById('modalTbody').innerHTML = '<tr class="empty-row"><td colspan="6">Sin datos para la categoría seleccionada.</td></tr>';
-    return;
-  }
-  document.getElementById('modalTbody').innerHTML = rows.map(d => `
-    <tr>
-      <td>${d.pos || '—'}</td>
-      <td>${chainTag(d.cadena)}</td>
-      <td>${catTag(d.categoria)}</td>
-      <td class="num">${Math.round(d.cuota).toLocaleString()}</td>
-      <td class="num">${Math.round(d.avance).toLocaleString()}</td>
-      <td>${pill(d.pct)}</td>
-    </tr>
-  `).join('');
+function renderModalTable(){
+  if(!_mP)return;
+  let rows=ALL_ROWS.filter(d=>d.promotor===_mP);
+  if(_mCat!=='ALL')rows=rows.filter(d=>d.categoria.toUpperCase()===_mCat.toUpperCase());
+  const col=_mSortCol,dir=_mSortDir;
+  rows.sort((a,b)=>{
+    let va,vb;
+    if(col==='pos'){va=a.pos||'';vb=b.pos||'';}
+    else if(col==='cuota'){va=a.cuota;vb=b.cuota;}
+    else if(col==='avance'){va=a.avance;vb=b.avance;}
+    else if(col==='falta'){va=a.cuota-a.avance;vb=b.cuota-b.avance;}
+    else{va=a.pct;vb=b.pct;}
+    return typeof va==='string'?va.localeCompare(vb)*dir:(va-vb)*dir;
+  });
+  if(!rows.length){document.getElementById('modalTbody').innerHTML='<tr class="empty-row"><td colspan="7">Sin datos.</td></tr>';return;}
+  document.getElementById('modalTbody').innerHTML=rows.map(d=>{
+    const falta=Math.max(0,Math.round(d.cuota-d.avance));
+    return`<tr><td>${d.pos||'—'}</td><td>${chainTag(d.cadena)}</td><td>${catTag(d.categoria)}</td><td class="num">${Math.round(d.cuota).toLocaleString()}</td><td class="num">${Math.round(d.avance).toLocaleString()}</td><td class="num" style="color:${falta>0?'var(--red)':'var(--green)'}">${falta>0?'-'+falta.toLocaleString():'✓'}</td><td>${pill(d.pct)}</td></tr>`;
+  }).join('');
 }
 
-function setModalCat(cat, el) {
-  _modalCat = cat;
-  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-  el.classList.add('active');
-  renderModalTable();
+function setModalCat(cat,el){_mCat=cat;document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');renderModalTable();}
+function closeModal(){document.getElementById('modalOverlay').classList.remove('open');document.querySelectorAll('.promo-btn').forEach(b=>b.classList.remove('active'));}
+function handleOverlayClick(e){if(e.target===document.getElementById('modalOverlay'))closeModal();}
+
+function switchTab(tab,el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');
+  document.getElementById('barsTab').style.display=tab==='bars'?'block':'none';
+  document.getElementById('alertsTab').style.display=tab==='alerts'?'block':'none';
+  document.getElementById('promoTab').style.display=tab==='promo'?'block':'none';
 }
 
-function closeModal() {
-  document.getElementById('modalOverlay').classList.remove('open');
-  document.querySelectorAll('.promo-btn').forEach(b => b.classList.remove('active'));
+function render(){
+  const filtered=filterRows(),raw=getRAW(filtered),f=getFilters();
+  renderProgressHero(filtered);renderMetrics(filtered);renderPodium(filtered);renderCadenaSummary(filtered);
+  if(f.cat==='ALL'||f.cat.toUpperCase()==='VELO')renderBars(raw,'Velo','veloSection','Velo','badge-velo');
+  else document.getElementById('veloSection').innerHTML='';
+  if(f.cat==='ALL'||f.cat.toUpperCase().includes('CAPS'))renderBars(raw,'LS Caps','capsSection','LS Caps','badge-caps');
+  else document.getElementById('capsSection').innerHTML='';
+  renderAlerts(filtered);renderPromoBtns();
 }
 
-function handleOverlayClick(e) {
-  if (e.target === document.getElementById('modalOverlay')) closeModal();
-}
-
-// ── TABS ──────────────────────────────────────────────────────────────────────
-function switchTab(tab, el) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
-  document.getElementById('barsTab').style.display   = tab === 'bars'   ? 'block' : 'none';
-  document.getElementById('alertsTab').style.display = tab === 'alerts' ? 'block' : 'none';
-  document.getElementById('promoTab').style.display  = tab === 'promo'  ? 'block' : 'none';
-}
-
-// ── MAIN RENDER ───────────────────────────────────────────────────────────────
-function render() {
-  const filtered = filterRows();
-  const raw = getRAW(filtered);
-  const f = getFilters();
-
-  renderMetrics(filtered);
-
-  const sv = f.cat === 'ALL' || f.cat.toUpperCase() === 'VELO';
-  const sc = f.cat === 'ALL' || f.cat.toUpperCase().includes('CAPS');
-  if (sv) renderBars(raw, 'Velo',    'veloSection', 'Velo',    'badge-velo');
-  else    document.getElementById('veloSection').innerHTML = '';
-  if (sc) renderBars(raw, 'LS Caps', 'capsSection', 'LS Caps', 'badge-caps');
-  else    document.getElementById('capsSection').innerHTML = '';
-
-  renderAlerts(filtered);
-  renderPromoBtns();
-}
-
-// ── INIT ──────────────────────────────────────────────────────────────────────
 loadData();
 </script>
 </body>
